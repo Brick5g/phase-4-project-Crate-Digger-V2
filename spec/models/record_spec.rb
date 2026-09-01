@@ -40,4 +40,16 @@ RSpec.describe Record, type: :model do
       expect(record.artist).to be_a(Artist)
     end
   end
+
+  describe "scopes" do
+    it "returns records in alphabetical order by title" do
+      create(:record, title: "Zebra")
+      create(:record, title: "Abbey Road")
+      create(:record, title: "Midnight Marauders")
+
+      expect(Record.alphabetical.pluck(:title)).to eq(
+        [ "Abbey Road", "Midnight Marauders", "Zebra" ]
+      )
+    end
+  end
 end
