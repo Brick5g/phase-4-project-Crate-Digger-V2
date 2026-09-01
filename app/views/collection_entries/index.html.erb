@@ -1,0 +1,10 @@
+<h1>My Collection</h1>
+
+<% @collection_entries.each do |entry| %>
+  <div>
+    <h2><%= entry.record.title %></h2>
+    <p>Artist: <%= entry.record.artist.name %></p>
+    <p>Purchase Price: <%= entry.purchase_price %></p>
+    <p>Notes: <%= entry.notes %></p>
+  </div>
+<% end %>
