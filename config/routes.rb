@@ -9,5 +9,9 @@ Rails.application.routes.draw do
 
   delete "/logout", to: "sessions#destroy"
 
-  resources :collection_entries, only: [ :index ]
+  resources :records, only: [] do
+    resources :collection_entries, only: [ :new, :create ]
+  end
+
+  resources :collection_entries, only: [ :index, :edit, :update, :destroy ]
 end

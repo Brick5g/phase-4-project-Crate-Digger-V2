@@ -1,0 +1,29 @@
+<h1>Add Record to Collection</h1>
+
+<p><%= @record.title %></p>
+
+<% if @collection_entry.errors.any? %>
+  <div>
+    <h2>There were some problems:</h2>
+
+    <ul>
+      <% @collection_entry.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: [ @record, @collection_entry ] do |form| %>
+  <div>
+    <%= form.label :purchase_price %>
+    <%= form.number_field :purchase_price, step: 0.01 %>
+  </div>
+
+  <div>
+    <%= form.label :notes %>
+    <%= form.text_area :notes %>
+  </div>
+
+  <%= form.submit "Add to Collection" %>
+<% end %>
