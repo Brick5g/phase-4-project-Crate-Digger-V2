@@ -5,18 +5,19 @@
 </p>
 
 <p>
-  Genres are normally added while adding a release
-  or editing an artist.
+  Select a genre to see the releases connected to it.
 </p>
 
-<p><%= link_to "Home", root_path %></p>
+<p>
+  <%= link_to "Home",
+              root_path %>
+</p>
 
 <% @genres.each do |genre| %>
-  <h2>
-    <%= link_to genre.name, genre_path(genre) %>
-  </h2>
-
-  <% if genre.description.present? %>
-    <p><%= genre.description %></p>
-  <% end %>
+  <div>
+    <h2>
+      <%= link_to genre.name,
+                  genre_path(genre) %>
+    </h2>
+  </div>
 <% end %>

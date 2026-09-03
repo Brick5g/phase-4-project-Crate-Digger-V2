@@ -73,18 +73,41 @@ class RecordsController < ApplicationController
   end
 
   def update
-    if @record.update(
-      record_params
-    )
-      redirect_to record_path(
-        @record
-      )
-    else
-      load_form_options
+    load_form_options
+
+    if duplicate_primary_genre?
+      @genre_error =
+        "The new genre cannot be the same as the primary genre."
 
       render :edit,
              status: :unprocessable_content
+
+      return
     end
+
+    Record.transaction do
+      @record.update!(
+        record_params
+      )
+
+      save_record_genres
+    end
+
+    redirect_to record_path(
+      @record
+    )
+  rescue ActiveRecord::RecordInvalid => error
+    if error.record == @record
+      @record = error.record
+    else
+      @genre_error =
+        error.record.errors.full_messages.join(", ")
+    end
+
+    load_form_options
+
+    render :edit,
+           status: :unprocessable_content
   end
 
   def destroy
@@ -121,6 +144,34 @@ class RecordsController < ApplicationController
     @genres = Genre.order(
       :name
     )
+
+    @primary_genre_id =
+      if params[:primary_genre_id].present?
+        params[:primary_genre_id].to_i
+      elsif @record.persisted?
+        @record.record_genres.find_by(
+          primary_genre: true
+        )&.genre_id
+      end
+
+    @additional_genre_ids =
+      if params.key?(:subgenre_ids)
+        Array(
+          params[:subgenre_ids]
+        ).reject(
+          &:blank?
+        ).map(
+          &:to_i
+        )
+      elsif @record.persisted?
+        @record.record_genres.where(
+          primary_genre: false
+        ).pluck(
+          :genre_id
+        )
+      else
+        []
+      end
   end
 
   def selected_primary_genre
@@ -195,6 +246,8 @@ class RecordsController < ApplicationController
       primary_genre = custom_genre
       custom_genre = nil
     end
+
+    @record.record_genres.destroy_all
 
     if primary_genre.present?
       @record.record_genres.create!(
