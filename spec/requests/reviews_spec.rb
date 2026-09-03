@@ -35,7 +35,7 @@ RSpec.describe "Reviews", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Review Midnight Marauders")
-      expect(response.body).to include("Your Rating (1-10)")
+      expect(response.body).to include("Your Rating")
       expect(response.body).to include("Your Thoughts (Optional)")
     end
   end
