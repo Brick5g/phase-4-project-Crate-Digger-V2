@@ -1,0 +1,74 @@
+<h1>Crate Digger V2</h1>
+
+<p>
+  Welcome to Crate Digger V2, a vinyl collection tracker where you can
+  browse records, artists, and genres while building your own collection.
+</p>
+
+<% if current_user %>
+  <h2>Welcome, <%= current_user.username %>!</h2>
+
+  <p>
+    Ready to keep digging? View your personal collection or explore the
+    record database below.
+  </p>
+
+  <p>
+    <%= link_to "View My Collection", collection_entries_path %>
+  </p>
+
+  <p>
+    <%= button_to "Log Out", logout_path, method: :delete %>
+  </p>
+<% else %>
+  <h2>Start Your Collection</h2>
+
+  <p>
+    Create an account to save records to your personal collection.
+    Already have an account? Log in to continue where you left off.
+  </p>
+
+  <p>
+    <%= link_to "Sign Up", signup_path %>
+  </p>
+
+  <p>
+    <%= link_to "Log In", login_path %>
+  </p>
+<% end %>
+
+<h2>Explore the Database</h2>
+
+<p>
+  Browse the music currently stored in Crate Digger.
+</p>
+
+<p>
+  <%= link_to "Browse Records", records_path %>
+</p>
+
+<p>
+  <%= link_to "Browse Artists", artists_path %>
+</p>
+
+<p>
+  <%= link_to "Browse Genres", genres_path %>
+</p>
+
+<h2>Contribute</h2>
+
+<p>
+  Don't see what you're looking for? Add new music information to the database.
+</p>
+
+<p>
+  <%= link_to "Add New Record", new_record_path %>
+</p>
+
+<p>
+  <%= link_to "Add New Artist", new_artist_path %>
+</p>
+
+<p>
+  <%= link_to "Add New Genre", new_genre_path %>
+</p>

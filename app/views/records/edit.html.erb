@@ -1,0 +1,55 @@
+<h1>Edit Record</h1>
+
+<p>
+  Update the shared information for this record.
+  Changes here affect the record itself, not your personal collection notes.
+</p>
+
+<% if @record.errors.any? %>
+  <div>
+    <h2>Please fix the following:</h2>
+
+    <ul>
+      <% @record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @record do |form| %>
+  <div>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :release_year %>
+    <%= form.number_field :release_year %>
+  </div>
+
+  <div>
+    <%= form.label :format %>
+    <%= form.text_field :format %>
+  </div>
+
+  <div>
+    <%= form.label :condition %>
+    <%= form.text_field :condition %>
+  </div>
+
+  <div>
+    <%= form.label :artist_id, "Artist" %>
+    <%= form.collection_select :artist_id, @artists, :id, :name %>
+  </div>
+
+  <%= form.submit "Update Record" %>
+<% end %>
+
+<p>
+  <%= link_to "Back to Record", record_path(@record) %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>

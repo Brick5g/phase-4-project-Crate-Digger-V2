@@ -1,10 +1,13 @@
-<h1>Add Record to Collection</h1>
+<h1>Add <%= @record.title %> to My Collection</h1>
 
-<p><%= @record.title %></p>
+<p>
+  Save this record to your personal collection.
+  You can include what you paid for it and any notes you want to remember.
+</p>
 
 <% if @collection_entry.errors.any? %>
   <div>
-    <h2>There were some problems:</h2>
+    <h2>Please fix the following:</h2>
 
     <ul>
       <% @collection_entry.errors.full_messages.each do |message| %>
@@ -16,7 +19,7 @@
 
 <%= form_with model: [ @record, @collection_entry ] do |form| %>
   <div>
-    <%= form.label :purchase_price %>
+    <%= form.label :purchase_price, "Purchase Price" %>
     <%= form.number_field :purchase_price, step: 0.01 %>
   </div>
 
@@ -25,5 +28,13 @@
     <%= form.text_area :notes %>
   </div>
 
-  <%= form.submit "Add to Collection" %>
+  <%= form.submit "Add to My Collection" %>
 <% end %>
+
+<p>
+  <%= link_to "Back to Record", record_path(@record) %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>

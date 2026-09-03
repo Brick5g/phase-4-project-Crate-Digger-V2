@@ -1,0 +1,53 @@
+<h1>Records</h1>
+
+<p>
+  Browse all records currently available in Crate Digger.
+  Select a record to view its artist, release information, genres,
+  and collection options.
+</p>
+
+<p>
+  <%= link_to "Add New Record", new_record_path %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>
+
+<% if @records.any? %>
+  <% @records.each do |record| %>
+    <div>
+      <h2>
+        <%= link_to record.title, record_path(record) %>
+      </h2>
+
+      <p>
+        Artist:
+        <%= record.artist.name %>
+      </p>
+
+      <p>
+        Release Year:
+        <%= record.release_year %>
+      </p>
+
+      <p>
+        Format:
+        <%= record.format %>
+      </p>
+
+      <p>
+        Condition:
+        <%= record.condition %>
+      </p>
+    </div>
+  <% end %>
+<% else %>
+  <p>
+    No records have been added yet.
+  </p>
+
+  <p>
+    <%= link_to "Add the First Record", new_record_path %>
+  </p>
+<% end %>

@@ -1,8 +1,13 @@
-<h1>Create an Account</h1
+<h1>Sign Up</h1>
+
+<p>
+  Create an account to start building your personal record collection.
+  You'll use this account to save records, purchase prices, and notes.
+</p>
 
 <% if @user.errors.any? %>
   <div>
-    <h2>There were some problems with your signup:</h2>
+    <h2>Please fix the following:</h2>
 
     <ul>
       <% @user.errors.full_messages.each do |message| %>
@@ -29,9 +34,18 @@
   </div>
 
   <div>
-    <%= form.label :password_confirmation %>
+    <%= form.label :password_confirmation, "Confirm Password" %>
     <%= form.password_field :password_confirmation %>
   </div>
 
-  <%= form.submit "Sign Up" %>
+  <%= form.submit "Create Account" %>
 <% end %>
+
+<p>
+  Already have an account?
+  <%= link_to "Log In", login_path %>
+</p>
+
+<p>
+  <%= link_to "Back to Home", root_path %>
+</p>

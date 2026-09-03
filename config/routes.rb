@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root "users#new"
+  root "home#index"
 
   get "/signup", to: "users#new"
   post "/signup", to: "users#create"
@@ -9,9 +9,14 @@ Rails.application.routes.draw do
 
   delete "/logout", to: "sessions#destroy"
 
-  resources :records, only: [] do
+  resources :artists
+  resources :genres
+
+  resources :records, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
     resources :collection_entries, only: [ :new, :create ]
+    resources :record_genres, only: [ :new, :create ]
   end
 
   resources :collection_entries, only: [ :index, :edit, :update, :destroy ]
+  resources :record_genres, only: [ :destroy ]
 end

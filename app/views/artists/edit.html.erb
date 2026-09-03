@@ -1,0 +1,40 @@
+<h1>Edit Artist</h1>
+
+<p>
+  Update this artist's information.
+  Records already associated with this artist will remain connected.
+</p>
+
+<% if @artist.errors.any? %>
+  <div>
+    <h2>Please fix the following:</h2>
+
+    <ul>
+      <% @artist.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @artist do |form| %>
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :country %>
+    <%= form.text_field :country %>
+  </div>
+
+  <%= form.submit "Update Artist" %>
+<% end %>
+
+<p>
+  <%= link_to "Back to Artist", artist_path(@artist) %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>

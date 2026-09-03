@@ -1,0 +1,87 @@
+<h1><%= @record.title %></h1>
+
+<p>
+  View this record's details, manage its genres,
+  or add it to your personal collection.
+</p>
+
+<p>
+  Artist:
+  <%= @record.artist.name %>
+</p>
+
+<p>
+  Release Year:
+  <%= @record.release_year %>
+</p>
+
+<p>
+  Format:
+  <%= @record.format %>
+</p>
+
+<p>
+  Condition:
+  <%= @record.condition %>
+</p>
+
+<h2>Genres</h2>
+
+<p>
+  Genres describe the musical styles associated with this record.
+  A genre marked "Primary" represents the record's main genre.
+</p>
+
+<% if @record.record_genres.any? %>
+  <% @record.record_genres.each do |record_genre| %>
+    <div>
+      <p>
+        <%= record_genre.genre.name %>
+
+        <% if record_genre.primary_genre %>
+          (Primary)
+        <% end %>
+      </p>
+
+      <p>
+        <%= record_genre.notes %>
+      </p>
+
+      <%= button_to "Remove Genre",
+                    record_genre_path(record_genre),
+                    method: :delete,
+                    data: {
+                      turbo_confirm: "Remove this genre from the record?"
+                    } %>
+    </div>
+  <% end %>
+<% else %>
+  <p>No genres added yet.</p>
+<% end %>
+
+<p>
+  <%= link_to "Add Genre", new_record_record_genre_path(@record) %>
+</p>
+
+<p>
+  <%= link_to "Add to Collection", new_record_collection_entry_path(@record) %>
+</p>
+
+<p>
+  <%= link_to "Edit Record", edit_record_path(@record) %>
+</p>
+
+<p>
+  <%= link_to "Back to Records", records_path %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>
+
+<%= button_to "Delete Record",
+              record_path(@record),
+              method: :delete,
+              data: {
+                turbo_confirm: "Are you sure you want to delete this record?"
+              } %>

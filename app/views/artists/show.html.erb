@@ -1,0 +1,60 @@
+<h1><%= @artist.name %></h1>
+
+<p>
+  Country:
+  <%= @artist.country %>
+</p>
+
+<h2>Records by <%= @artist.name %></h2>
+
+<% if @artist.records.any? %>
+  <% @artist.records.each do |record| %>
+    <div>
+      <h3>
+        <%= link_to record.title, record_path(record) %>
+      </h3>
+
+      <p>
+        Release Year:
+        <%= record.release_year %>
+      </p>
+
+      <p>
+        Format:
+        <%= record.format %>
+      </p>
+
+      <p>
+        Condition:
+        <%= record.condition %>
+      </p>
+    </div>
+  <% end %>
+<% else %>
+  <p>
+    No records by this artist have been added yet.
+  </p>
+
+  <p>
+    <%= link_to "Add a Record", new_record_path %>
+  </p>
+<% end %>
+
+<p>
+  <%= link_to "Edit Artist", edit_artist_path(@artist) %>
+</p>
+
+<p>
+  <%= link_to "Back to Artists", artists_path %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>
+
+<%= button_to "Delete Artist",
+              artist_path(@artist),
+              method: :delete,
+              data: {
+                turbo_confirm: "Are you sure you want to delete this artist?"
+              } %>

@@ -1,5 +1,10 @@
 <h1>Log In</h1>
 
+<p>
+  Log in to access your personal vinyl collection.
+  Your saved records and collection notes are tied to your account.
+</p>
+
 <% if @error %>
   <p><%= @error %></p>
 <% end %>
@@ -17,3 +22,12 @@
 
   <%= form.submit "Log In" %>
 <% end %>
+
+<p>
+  Don't have an account?
+  <%= link_to "Sign Up", signup_path %>
+</p>
+
+<p>
+  <%= link_to "Back to Home", root_path %>
+</p>
