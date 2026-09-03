@@ -1,162 +1,216 @@
-<h1><%= @record.title %></h1>
-
-<% if @record.artwork_url.present? %>
-  <%= image_tag @record.artwork_url,
-                alt: "#{@record.title} cover" %>
-<% end %>
-
-<h2>Release Information</h2>
-
-<p>
-  Artist:
-  <%= link_to @record.artist.name,
-              artist_path(@record.artist) %>
-</p>
-
-<p>
-  Release Type:
-  <%= @record.release_type %>
-</p>
-
-<p>
-  Release Date:
-  <%= @record.release_date || "Unknown" %>
-</p>
-
-<% if @record.description.present? %>
-  <p>
-    Description:
-    <%= @record.description %>
-  </p>
-<% end %>
-
-<h2>Genres</h2>
-
-<% if @record.record_genres.any? %>
-  <% @record.record_genres.each do |record_genre| %>
-    <p>
-      <%= record_genre.genre.name %>
-
-      <% if record_genre.primary_genre %>
-        <strong>(Primary Genre)</strong>
-      <% end %>
-    </p>
-  <% end %>
-<% else %>
-  <p>
-    No genres have been added to this release yet.
-  </p>
-<% end %>
-
-<p>
-  <%= link_to "Choose Release Genres",
-              new_record_record_genre_path(@record) %>
-</p>
-
-<h2>My Crate</h2>
-
-<% if current_user %>
-  <% saved_entry = current_user.collection_entries.find_by(record: @record) %>
-
-  <% if saved_entry %>
-    <p>
-      This release is saved in your collection.
-    </p>
-
-    <p>
-      <%= link_to "View My Collection",
-                  collection_entries_path %>
-    </p>
-  <% else %>
-    <p>
-      Want to remember this release?
-    </p>
-
-    <p>
-      <%= link_to "Save to My Collection",
-                  new_record_collection_entry_path(@record) %>
-    </p>
-  <% end %>
-<% else %>
-  <p>
-    Log in to save this release to your personal collection.
-  </p>
-
-  <p>
-    <%= link_to "Log In", login_path %>
-  </p>
-<% end %>
-
-<h2>Reviews</h2>
-
-<% if @record.reviews.any? %>
-  <% @record.reviews.each do |review| %>
-    <div>
-      <p>
-        <strong><%= review.user.username %></strong>
-        rated this release
-        <strong><%= review.rating %> / 10</strong>
-      </p>
-
-      <% if review.body.present? %>
-        <p>
-          <%= review.body %>
-        </p>
-      <% end %>
-
-      <% if current_user == review.user %>
-        <p>
-          <%= link_to "Edit My Review",
-                      edit_review_path(review) %>
-        </p>
+<div class="record-show">
+  <section class="record-hero">
+    <div class="record-artwork-section">
+      <% if @record.artwork_url.present? %>
+        <%= image_tag @record.artwork_url,
+                      alt: "#{@record.title} cover",
+                      class: "record-show-cover" %>
+      <% else %>
+        <div class="record-show-cover-missing">
+          No Artwork
+        </div>
       <% end %>
     </div>
-  <% end %>
-<% else %>
-  <p>
-    Nobody has reviewed this release yet.
-  </p>
-<% end %>
 
-<% if current_user %>
-  <% my_review = current_user.reviews.find_by(record: @record) %>
+    <div class="record-details">
+      <p class="record-show-label">
+        <%= @record.release_type %>
+      </p>
 
-  <% unless my_review %>
+      <h1>
+        <%= @record.title %>
+      </h1>
+
+      <h2 class="record-show-artist">
+        <%= link_to @record.artist.name,
+                    artist_path(@record.artist) %>
+      </h2>
+
+      <div class="record-metadata">
+        <p>
+          <strong>Release Type:</strong>
+          <%= @record.release_type %>
+        </p>
+
+        <p>
+          <strong>Release Date:</strong>
+          <%= @record.release_date || "Unknown" %>
+        </p>
+      </div>
+
+      <% if @record.description.present? %>
+        <div class="record-description">
+          <h3>About This Release</h3>
+
+          <p>
+            <%= @record.description %>
+          </p>
+        </div>
+      <% end %>
+
+      <div class="record-genres">
+        <h3>Genres</h3>
+
+        <% if @record.record_genres.any? %>
+          <div class="genre-tags">
+            <% @record.record_genres.each do |record_genre| %>
+              <div class="genre-tag">
+                <%= record_genre.genre.name %>
+
+                <% if record_genre.primary_genre %>
+                  <strong>Primary</strong>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p>
+            No genres have been added to this release yet.
+          </p>
+        <% end %>
+
+        <% if current_user %>
+          <%= link_to "Choose Release Genres",
+                      new_record_record_genre_path(@record),
+                      class: "record-action-link" %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <section class="record-section">
+    <h2>My Crate</h2>
+
+    <% if current_user %>
+      <% saved_entry =
+           current_user.collection_entries.find_by(
+             record: @record
+           ) %>
+
+      <% if saved_entry %>
+        <div class="crate-status">
+          <strong>Saved to My Collection</strong>
+
+          <p>
+            This release is already part of your Crate Digger collection.
+          </p>
+
+          <%= link_to "View My Collection",
+                      collection_entries_path,
+                      class: "record-action-link" %>
+        </div>
+      <% else %>
+        <div class="crate-status">
+          <strong>Not Saved Yet</strong>
+
+          <p>
+            Want to remember this release?
+          </p>
+
+          <%= link_to "Save to My Collection",
+                      new_record_collection_entry_path(@record),
+                      class: "record-action-link" %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="crate-status">
+        <p>
+          Log in to save this release to your personal collection.
+        </p>
+
+        <%= link_to "Log In",
+                    login_path,
+                    class: "record-action-link" %>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="record-section">
+    <h2>Reviews</h2>
+
+    <% if @record.reviews.any? %>
+      <div class="record-reviews">
+        <% @record.reviews.each do |review| %>
+          <div class="review-card">
+            <div class="review-heading">
+              <strong>
+                <%= review.user.username %>
+              </strong>
+
+              <span class="review-score">
+                <%= review.rating %> / 10
+              </span>
+            </div>
+
+            <% if review.body.present? %>
+              <p>
+                <%= review.body %>
+              </p>
+            <% end %>
+
+            <% if current_user == review.user %>
+              <%= link_to "Edit My Review",
+                          edit_review_path(review),
+                          class: "record-action-link" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p>
+        Nobody has reviewed this release yet.
+      </p>
+    <% end %>
+
+    <% if current_user %>
+      <% my_review =
+           current_user.reviews.find_by(
+             record: @record
+           ) %>
+
+      <% unless my_review %>
+        <%= link_to "Review This Release",
+                    new_record_review_path(@record),
+                    class: "record-action-link" %>
+      <% end %>
+    <% else %>
+      <p>
+        Log in to leave a review.
+      </p>
+    <% end %>
+  </section>
+
+  <section class="record-section record-management">
+    <h2>Release Management</h2>
+
     <p>
-      <%= link_to "Review This Release",
-                  new_record_review_path(@record) %>
+      Logged-in users can help keep the shared music information accurate.
     </p>
-  <% end %>
-<% else %>
-  <p>
-    Log in to leave a review.
-  </p>
-<% end %>
 
-<h2>Release Management</h2>
+    <% if current_user %>
+      <div class="record-management-actions">
+        <%= link_to "Edit Release",
+                    edit_record_path(@record),
+                    class: "record-action-link" %>
 
-<p>
-  Logged-in users can help keep the shared music information accurate.
-</p>
+        <%= button_to "Delete Release",
+                      record_path(@record),
+                      method: :delete,
+                      class: "record-delete-button",
+                      data: {
+                        turbo_confirm: "Delete this release?"
+                      } %>
+      </div>
+    <% end %>
+  </section>
 
-<% if current_user %>
-  <p>
-    <%= link_to "Edit Release",
-                edit_record_path(@record) %>
-  </p>
+  <div class="page-actions">
+    <%= link_to "Back to Releases",
+                records_path,
+                class: "search-link" %>
 
-  <%= button_to "Delete Release",
-                record_path(@record),
-                method: :delete,
-                data: {
-                  turbo_confirm: "Delete this release?"
-                } %>
-<% end %>
-
-<p>
-  <%= link_to "Back to Releases", records_path %>
-</p>
-
-<p>
-  <%= link_to "Home", root_path %>
-</p>
+    <%= link_to "Home",
+                root_path,
+                class: "search-link" %>
+  </div>
+</div>

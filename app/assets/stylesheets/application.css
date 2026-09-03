@@ -460,8 +460,6 @@ body > img {
   margin-top: 0;
 }
 
-/* ARTIST SEARCH RESULTS */
-
 .artist-results-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -491,8 +489,6 @@ body > img {
   background-color: #1f1f1f;
   color: white;
 }
-
-/* RELEASE SEARCH RESULTS */
 
 .release-results-grid {
   display: grid;
@@ -541,84 +537,7 @@ body > img {
   border-top: 2px solid #1f1f1f;
 }
 
-/* RESPONSIVE */
-
-@media (max-width: 1100px) {
-  .release-results-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 900px) {
-  .collection-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .artist-results-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .release-results-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 800px) {
-  body {
-    padding: 20px;
-  }
-
-  .home-page {
-    display: block;
-    overflow: visible;
-    margin: -20px;
-  }
-
-  .home-content {
-    width: 100%;
-    min-height: auto;
-    padding: 40px 25px;
-  }
-
-  .home-content h1 {
-    font-size: 42px;
-  }
-
-  .album-wall {
-    width: 100%;
-    height: 500px;
-  }
-
-  .album-column {
-    height: 500px;
-  }
-
-  h1 {
-    font-size: 36px;
-  }
-}
-
-@media (max-width: 600px) {
-  .collection-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .artist-results-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .release-results-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .music-search-row {
-    display: block;
-  }
-
-  .music-search-row input[type="submit"] {
-    margin-top: 10px;
-  }
-}
+/* REVIEWS */
 
 .review-form-section {
   margin: 30px 0;
@@ -688,4 +607,290 @@ body > img {
 
 .review-errors h2 {
   margin-top: 0;
+}
+
+/* RECORD SHOW */
+
+.record-show {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.record-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 55px;
+  align-items: start;
+}
+
+.record-artwork-section {
+  width: 100%;
+}
+
+.record-show-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.record-show-cover-missing {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #1f1f1f;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.record-details {
+  padding-top: 10px;
+}
+
+.record-show-label {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.record-details h1 {
+  font-size: 52px;
+  margin-bottom: 10px;
+}
+
+.record-show-artist {
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.record-show-artist a {
+  text-decoration: none;
+}
+
+.record-show-artist a:hover {
+  color: #8c3b2f;
+}
+
+.record-metadata {
+  border-top: 2px solid #1f1f1f;
+  border-bottom: 2px solid #1f1f1f;
+  padding: 15px 0;
+  margin: 25px 0;
+}
+
+.record-metadata p {
+  margin: 5px 0;
+}
+
+.record-description {
+  margin-top: 30px;
+}
+
+.record-genres {
+  margin-top: 30px;
+}
+
+.genre-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.genre-tag {
+  padding: 9px 12px;
+  border: 2px solid #1f1f1f;
+  font-weight: bold;
+}
+
+.genre-tag strong {
+  margin-left: 5px;
+  color: #8c3b2f;
+}
+
+.record-action-link {
+  display: inline-block;
+  padding: 10px 14px;
+  border: 2px solid #1f1f1f;
+  color: #1f1f1f;
+  text-decoration: none;
+  margin-top: 8px;
+}
+
+.record-action-link:hover {
+  background-color: #1f1f1f;
+  color: white;
+}
+
+.record-section {
+  margin-top: 55px;
+  padding-top: 30px;
+  border-top: 2px solid #1f1f1f;
+}
+
+.record-section h2 {
+  margin-top: 0;
+  font-size: 32px;
+}
+
+.crate-status {
+  padding: 20px;
+  border-left: 5px solid #8c3b2f;
+  background-color: #ebe4d8;
+  max-width: 700px;
+}
+
+.crate-status > strong {
+  font-size: 20px;
+}
+
+.record-reviews {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.review-card {
+  border: 2px solid #1f1f1f;
+  padding: 20px;
+}
+
+.review-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+
+.review-score {
+  padding: 8px 10px;
+  background-color: #1f1f1f;
+  color: white;
+  font-weight: bold;
+}
+
+.record-management-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.record-management-actions form {
+  margin: 0;
+}
+
+.record-delete-button {
+  margin-top: 8px;
+  background-color: transparent;
+  color: #1f1f1f;
+}
+
+.record-delete-button:hover {
+  background-color: #8c3b2f;
+  border-color: #8c3b2f;
+  color: white;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+  .release-results-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .record-hero {
+    gap: 35px;
+  }
+}
+
+@media (max-width: 900px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .artist-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .release-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .record-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .record-artwork-section {
+    max-width: 650px;
+  }
+}
+
+@media (max-width: 800px) {
+  body {
+    padding: 20px;
+  }
+
+  .home-page {
+    display: block;
+    overflow: visible;
+    margin: -20px;
+  }
+
+  .home-content {
+    width: 100%;
+    min-height: auto;
+    padding: 40px 25px;
+  }
+
+  .home-content h1 {
+    font-size: 42px;
+  }
+
+  .album-wall {
+    width: 100%;
+    height: 500px;
+  }
+
+  .album-column {
+    height: 500px;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+
+  .record-details h1 {
+    font-size: 42px;
+  }
+}
+
+@media (max-width: 600px) {
+  .collection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .artist-results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .release-results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .record-reviews {
+    grid-template-columns: 1fr;
+  }
+
+  .music-search-row {
+    display: block;
+  }
+
+  .music-search-row input[type="submit"] {
+    margin-top: 10px;
+  }
 }
