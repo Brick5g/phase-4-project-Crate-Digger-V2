@@ -13,8 +13,8 @@ RSpec.describe "Home", type: :request do
 
       expect(response.body).to include("Crate Digger V2")
       expect(response.body).to include("Log In")
-      expect(response.body).to include("Sign Up")
-      expect(response.body).to include("Browse Records")
+      expect(response.body).to include("Create an Account")
+      expect(response.body).to include("Browse Releases")
       expect(response.body).to include("Browse Artists")
 
       expect(response.body).not_to include("My Collection")

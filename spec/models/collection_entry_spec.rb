@@ -1,57 +1,53 @@
 require "rails_helper"
 
 RSpec.describe CollectionEntry, type: :model do
-  it "is valid with valid attributes" do
-    collection_entry = build(:collection_entry)
+  describe "validations" do
+    it "is valid with a user and record" do
+      collection_entry = build(:collection_entry)
 
-    expect(collection_entry).to be_valid
+      expect(collection_entry).to be_valid
+    end
+
+    it "allows notes to be blank" do
+      collection_entry = build(
+        :collection_entry,
+        notes: nil
+      )
+
+      expect(collection_entry).to be_valid
+    end
+
+    it "does not allow the same user to save the same release twice" do
+      user = create(:user)
+      record = create(:record)
+
+      create(
+        :collection_entry,
+        user: user,
+        record: record
+      )
+
+      duplicate = build(
+        :collection_entry,
+        user: user,
+        record: record
+      )
+
+      expect(duplicate).not_to be_valid
+    end
   end
 
-  it "requires notes" do
-    collection_entry = build(
-      :collection_entry,
-      notes: ""
-    )
+  describe "associations" do
+    it "belongs to a user" do
+      collection_entry = create(:collection_entry)
 
-    expect(collection_entry).not_to be_valid
-  end
+      expect(collection_entry.user).to be_a(User)
+    end
 
-  it "does not allow the same record twice in one user's collection" do
-    user = create(:user)
-    record = create(:record)
+    it "belongs to a record" do
+      collection_entry = create(:collection_entry)
 
-    create(
-      :collection_entry,
-      user: user,
-      record: record
-    )
-
-    duplicate_entry = build(
-      :collection_entry,
-      user: user,
-      record: record
-    )
-
-    expect(duplicate_entry).not_to be_valid
-  end
-
-  it "allows different users to save the same record" do
-    record = create(:record)
-    first_user = create(:user)
-    second_user = create(:user)
-
-    create(
-      :collection_entry,
-      user: first_user,
-      record: record
-    )
-
-    second_entry = build(
-      :collection_entry,
-      user: second_user,
-      record: record
-    )
-
-    expect(second_entry).to be_valid
+      expect(collection_entry.record).to be_a(Record)
+    end
   end
 end

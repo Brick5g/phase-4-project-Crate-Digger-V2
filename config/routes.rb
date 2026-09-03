@@ -9,6 +9,12 @@ Rails.application.routes.draw do
 
   delete "/logout", to: "sessions#destroy"
 
+  get "/music-search", to: "music_searches#index", as: :music_search
+
+  get "/music-search/artists/:musicbrainz_id", to: "music_searches#artist", as: :music_search_artist
+
+  post "/music-search/releases/:musicbrainz_id", to: "music_searches#import", as: :import_music_release
+
   resources :artists
   resources :genres
 

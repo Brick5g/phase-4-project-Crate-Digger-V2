@@ -1,16 +1,28 @@
 <h1>Crate Digger V2</h1>
 
 <p>
-  Welcome to Crate Digger V2, a vinyl collection tracker and review platform
-  where you can browse records, artists, genres, and community reviews.
+  Welcome to Crate Digger V2.
+</p>
+
+<p>
+  Discover music, save releases you like,
+  and share your own ratings and reviews.
 </p>
 
 <% if current_user %>
   <h2>Welcome, <%= current_user.username %>!</h2>
 
   <p>
-    Ready to keep digging? Browse releases, write reviews,
-    or manage your personal collection.
+    Not sure where to begin?
+  </p>
+
+  <p>
+    Start by searching for a release you know.
+    Crate Digger will help you find the correct music information.
+  </p>
+
+  <p>
+    <%= link_to "Search for Music", music_search_path %>
   </p>
 
   <p>
@@ -21,31 +33,31 @@
     <%= button_to "Log Out", logout_path, method: :delete %>
   </p>
 <% else %>
-  <h2>Start Digging</h2>
+  <h2>New Here?</h2>
 
   <p>
-    Anyone can browse Crate Digger and read reviews.
-    Create an account to add releases, write reviews,
-    and build your personal collection.
+    You can look through Crate Digger without an account.
   </p>
 
   <p>
-    <%= link_to "Sign Up", signup_path %>
+    To save music, add releases, or write reviews,
+    you will need to create a free account first.
   </p>
 
   <p>
+    <%= link_to "Create an Account", signup_path %>
+  </p>
+
+  <p>
+    Already have an account?
     <%= link_to "Log In", login_path %>
   </p>
 <% end %>
 
-<h2>Explore the Database</h2>
+<h2>Browse Crate Digger</h2>
 
 <p>
-  Browse the music currently stored in Crate Digger.
-</p>
-
-<p>
-  <%= link_to "Browse Records", records_path %>
+  <%= link_to "Browse Releases", records_path %>
 </p>
 
 <p>
@@ -57,22 +69,14 @@
 </p>
 
 <% if current_user %>
-  <h2>Contribute</h2>
+  <h2>Other Ways to Add Music</h2>
 
   <p>
-    Don't see what you're looking for?
-    Add new music information to the database.
+    If music search does not find what you need,
+    you can enter a release manually.
   </p>
 
   <p>
-    <%= link_to "Add New Record", new_record_path %>
-  </p>
-
-  <p>
-    <%= link_to "Add New Artist", new_artist_path %>
-  </p>
-
-  <p>
-    <%= link_to "Add New Genre", new_genre_path %>
+    <%= link_to "Enter a Release Manually", new_record_path %>
   </p>
 <% end %>

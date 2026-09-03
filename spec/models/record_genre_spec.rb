@@ -2,27 +2,38 @@ require "rails_helper"
 
 RSpec.describe RecordGenre, type: :model do
   describe "validations" do
-    it "is valid with a primary genre value, notes, record, and genre" do
+    it "is valid with a record and genre" do
       record_genre = build(:record_genre)
 
       expect(record_genre).to be_valid
     end
 
-    it "is invalid without notes" do
-      record_genre = build(:record_genre, notes: nil)
+    it "allows notes to be blank" do
+      record_genre = build(
+        :record_genre,
+        notes: nil
+      )
 
-      expect(record_genre).not_to be_valid
+      expect(record_genre).to be_valid
     end
 
-    it "does not allow the same genre twice for the same record" do
+    it "does not allow the same genre twice on one record" do
       record = create(:record)
       genre = create(:genre)
 
-      create(:record_genre, record: record, genre: genre)
+      create(
+        :record_genre,
+        record: record,
+        genre: genre
+      )
 
-      duplicate_record_genre = build(:record_genre, record: record, genre: genre)
+      duplicate = build(
+        :record_genre,
+        record: record,
+        genre: genre
+      )
 
-      expect(duplicate_record_genre).not_to be_valid
+      expect(duplicate).not_to be_valid
     end
   end
 

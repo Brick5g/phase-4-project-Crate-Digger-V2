@@ -1,0 +1,73 @@
+<h1><%= @artist_name || "Artist Releases" %></h1>
+
+<% if @artist_country.present? %>
+  <p>
+    Country:
+    <%= @artist_country %>
+  </p>
+<% end %>
+
+<p>
+  These releases come from MusicBrainz.
+</p>
+
+<p>
+  Crate Digger loads the artist's release groups
+  instead of stopping after the first search page.
+</p>
+
+<% if @error %>
+  <h2>Loading Problem</h2>
+  <p><%= @error %></p>
+<% end %>
+
+<% if @release_results.any? %>
+  <h2>
+    Releases (<%= @release_results.length %>)
+  </h2>
+
+  <% @release_results.each do |release| %>
+    <div>
+      <%= image_tag(
+            "https://coverartarchive.org/release-group/#{release["id"]}/front-250",
+            alt: "#{release["title"]} cover",
+            width: 150,
+            onerror: "this.style.display='none'"
+          ) %>
+
+      <h3>
+        <%= release["title"] %>
+      </h3>
+
+      <p>
+        Type:
+        <%= release["primary-type"].presence || "Unknown" %>
+      </p>
+
+      <p>
+        First Released:
+        <%= release["first-release-date"].presence || "Unknown" %>
+      </p>
+
+      <%= button_to(
+            "Add to My Collection",
+            import_music_release_path(
+              release["id"]
+            ),
+            method: :post
+          ) %>
+    </div>
+  <% end %>
+<% elsif !@error %>
+  <p>
+    No releases were found for this artist.
+  </p>
+<% end %>
+
+<p>
+  <%= link_to "Back to Music Search", music_search_path %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>

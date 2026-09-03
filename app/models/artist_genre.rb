@@ -1,13 +1,10 @@
-class RecordGenre < ApplicationRecord
-  belongs_to :record
+class ArtistGenre < ApplicationRecord
+  belongs_to :artist
   belongs_to :genre
-
-  validates :primary_genre,
-            inclusion: { in: [ true, false ] }
 
   validates :genre_id,
             uniqueness: {
-              scope: :record_id
+              scope: :artist_id
             }
 
   validate :only_one_primary_genre
@@ -16,17 +13,17 @@ class RecordGenre < ApplicationRecord
 
   def only_one_primary_genre
     return unless primary_genre
-    return unless record_id
+    return unless artist_id
 
-    existing_primary_genre = RecordGenre.where(
-      record_id: record_id,
+    existing_primary_genre = ArtistGenre.where(
+      artist_id: artist_id,
       primary_genre: true
     ).where.not(id: id)
 
     if existing_primary_genre.exists?
       errors.add(
         :primary_genre,
-        "has already been selected for this release"
+        "has already been selected for this artist"
       )
     end
   end
