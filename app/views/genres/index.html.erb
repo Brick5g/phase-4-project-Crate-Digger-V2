@@ -1,40 +1,22 @@
 <h1>Genres</h1>
 
 <p>
-  Browse the genres used to organize records in Crate Digger.
-  Genres can be attached to records from an individual record's page.
+  Browse the music genres currently used in Crate Digger.
 </p>
 
 <p>
-  <%= link_to "Add New Genre", new_genre_path %>
+  Genres are normally added while adding a release
+  or editing an artist.
 </p>
 
-<p>
-  <%= link_to "Home", root_path %>
-</p>
+<p><%= link_to "Home", root_path %></p>
 
-<% if @genres.any? %>
-  <% @genres.each do |genre| %>
-    <div>
-      <h2>
-        <%= link_to genre.name, genre_path(genre) %>
-      </h2>
+<% @genres.each do |genre| %>
+  <h2>
+    <%= link_to genre.name, genre_path(genre) %>
+  </h2>
 
-      <p>
-        <%= genre.description %>
-      </p>
-    </div>
+  <% if genre.description.present? %>
+    <p><%= genre.description %></p>
   <% end %>
-<% else %>
-  <p>
-    No genres have been added yet.
-  </p>
-
-  <p>
-    Create a genre, then attach it to records from their record pages.
-  </p>
-
-  <p>
-    <%= link_to "Add the First Genre", new_genre_path %>
-  </p>
 <% end %>

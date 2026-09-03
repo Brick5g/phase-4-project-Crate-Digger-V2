@@ -1,71 +1,155 @@
 <h1>Add a Release</h1>
 
 <p>
-  Add a music release to Crate Digger.
+  Use this page to add a release to Crate Digger manually.
 </p>
 
 <p>
-  A release can be an album, EP, single, mixtape, or another published
-  music project.
-</p>
-
-<p>
-  Don't worry if you do not know every detail.
-  Some information can be filled in automatically when music search is added.
+  Enter the release information first, then choose the genres that
+  best describe the music.
 </p>
 
 <% if @record.errors.any? %>
   <div>
-    <h2>Please fix the following:</h2>
+    <h2>We could not save this release:</h2>
 
-    <ul>
-      <% @record.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
+    <% @record.errors.full_messages.each do |message| %>
+      <p>
+        <%= message %>
+      </p>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @genre_error.present? %>
+  <div>
+    <h2>We could not save the genres:</h2>
+
+    <p>
+      <%= @genre_error %>
+    </p>
   </div>
 <% end %>
 
 <%= form_with model: @record do |form| %>
+  <h2>Release Information</h2>
+
   <div>
-    <%= form.label :title, "Release Title" %>
+    <%= form.label :title,
+                   "Release Title" %>
+
     <%= form.text_field :title %>
   </div>
 
   <div>
-    <%= form.label :artist_id, "Artist" %>
-    <%= form.collection_select :artist_id, @artists, :id, :name %>
+    <%= form.label :artist_id,
+                   "Artist" %>
+
+    <%= form.collection_select :artist_id,
+                               Artist.order(:name),
+                               :id,
+                               :name,
+                               prompt: "Choose an artist" %>
   </div>
 
   <div>
-    <%= form.label :release_date, "Release Date" %>
+    <%= form.label :release_date,
+                   "Release Date" %>
+
     <%= form.date_field :release_date %>
   </div>
 
   <div>
-    <%= form.label :release_type, "Release Type" %>
+    <%= form.label :release_type,
+                   "Release Type" %>
 
     <%= form.select :release_type,
-                    [ "Album", "EP", "Single", "Mixtape", "Other" ] %>
+                    [
+                      "Album",
+                      "EP",
+                      "Single",
+                      "Mixtape",
+                      "Compilation",
+                      "Other"
+                    ],
+                    prompt: "Choose a release type" %>
   </div>
 
   <div>
-    <%= form.label :description, "Description (Optional)" %>
+    <%= form.label :description,
+                   "Description" %>
+
     <%= form.text_area :description %>
   </div>
 
-  <%= form.submit "Add Release" %>
+  <h2>Primary Genre</h2>
+
+  <p>
+    Choose the one genre that best describes this release.
+  </p>
+
+  <%= select_tag :primary_genre_id,
+                 options_from_collection_for_select(
+                   @genres,
+                   :id,
+                   :name,
+                   params[:primary_genre_id]
+                 ),
+                 include_blank: "No primary genre selected" %>
+
+  <h2>Additional Genres</h2>
+
+  <p>
+    Select any other genres that also describe this release.
+    You can choose more than one.
+  </p>
+
+  <% if @genres.any? %>
+    <% @genres.each do |genre| %>
+      <div>
+        <%= check_box_tag "subgenre_ids[]",
+                          genre.id,
+                          Array(
+                            params[:subgenre_ids]
+                          ).map(&:to_s).include?(
+                            genre.id.to_s
+                          ),
+                          id: "subgenre_#{genre.id}" %>
+
+        <%= label_tag "subgenre_#{genre.id}",
+                      genre.name %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>
+      There are no genres in Crate Digger yet.
+    </p>
+  <% end %>
+
+  <h2>Genre Not Listed?</h2>
+
+  <p>
+    Type one missing genre here.
+  </p>
+
+  <%= text_field_tag :new_genre_name,
+                     params[:new_genre_name],
+                     placeholder: "Example: Neo Soul" %>
+
+  <p>
+    If you leave Primary Genre blank and type a new genre here,
+    your new genre will become the primary genre.
+  </p>
+
+  <%= form.submit "Create Release" %>
 <% end %>
 
 <p>
-  Can't find the artist?
-  <%= link_to "Add the Artist First", new_artist_path %>
+  <%= link_to "Back to Releases",
+              records_path %>
 </p>
 
 <p>
-  <%= link_to "Back to Releases", records_path %>
-</p>
-
-<p>
-  <%= link_to "Home", root_path %>
+  <%= link_to "Home",
+              root_path %>
 </p>

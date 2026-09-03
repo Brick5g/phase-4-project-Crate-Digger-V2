@@ -1,40 +1,126 @@
 <h1>Edit Artist</h1>
 
 <p>
-  Update this artist's information.
-  Records already associated with this artist will remain connected.
+  Update the artist's information and choose the genres that best
+  describe their music.
 </p>
 
 <% if @artist.errors.any? %>
   <div>
-    <h2>Please fix the following:</h2>
+    <h2>We could not update this artist:</h2>
 
-    <ul>
-      <% @artist.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
+    <% @artist.errors.full_messages.each do |message| %>
+      <p>
+        <%= message %>
+      </p>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @genre_error.present? %>
+  <div>
+    <h2>We could not update the genres:</h2>
+
+    <p>
+      <%= @genre_error %>
+    </p>
   </div>
 <% end %>
 
 <%= form_with model: @artist do |form| %>
+  <h2>Artist Information</h2>
+
   <div>
-    <%= form.label :name %>
+    <%= form.label :name,
+                   "Artist Name" %>
+
     <%= form.text_field :name %>
   </div>
 
   <div>
-    <%= form.label :country %>
+    <%= form.label :country,
+                   "Country" %>
+
     <%= form.text_field :country %>
   </div>
+
+  <div>
+    <%= form.label :hometown,
+                   "Hometown" %>
+
+    <%= form.text_field :hometown %>
+  </div>
+
+  <div>
+    <%= form.label :details,
+                   "Artist Details" %>
+
+    <%= form.text_area :details %>
+  </div>
+
+  <h2>Primary Genre</h2>
+
+  <p>
+    Choose the single genre that best represents this artist.
+  </p>
+
+  <%= select_tag :primary_genre_id,
+                 options_from_collection_for_select(
+                   @genres,
+                   :id,
+                   :name,
+                   @primary_artist_genre&.genre_id
+                 ),
+                 include_blank: "No primary genre selected" %>
+
+  <h2>Additional Genres</h2>
+
+  <p>
+    Select as many additional genres as you need.
+  </p>
+
+  <% if @genres.any? %>
+    <% @genres.each do |genre| %>
+      <div>
+        <%= check_box_tag "subgenre_ids[]",
+                          genre.id,
+                          @additional_genre_ids.include?(genre.id),
+                          id: "subgenre_#{genre.id}" %>
+
+        <%= label_tag "subgenre_#{genre.id}",
+                      genre.name %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>
+      There are no genres in Crate Digger yet.
+    </p>
+  <% end %>
+
+  <h2>Genre Not Listed?</h2>
+
+  <p>
+    Type one missing genre below.
+  </p>
+
+  <%= text_field_tag :new_genre_name,
+                     params[:new_genre_name],
+                     placeholder: "Example: House" %>
+
+  <p>
+    If no primary genre is selected above, the new genre will become
+    the artist's primary genre.
+  </p>
 
   <%= form.submit "Update Artist" %>
 <% end %>
 
 <p>
-  <%= link_to "Back to Artist", artist_path(@artist) %>
+  <%= link_to "Back to Artist",
+              artist_path(@artist) %>
 </p>
 
 <p>
-  <%= link_to "Home", root_path %>
+  <%= link_to "Home",
+              root_path %>
 </p>

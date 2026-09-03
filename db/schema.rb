@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_03_142201) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_03_180143) do
+  create_table "artist_genres", force: :cascade do |t|
+    t.integer "artist_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "genre_id", null: false
+    t.boolean "primary_genre", default: false, null: false
+    t.datetime "updated_at", null: false
+    t.index ["artist_id", "genre_id"], name: "index_artist_genres_on_artist_id_and_genre_id", unique: true
+    t.index ["artist_id"], name: "index_artist_genres_on_artist_id"
+    t.index ["genre_id"], name: "index_artist_genres_on_genre_id"
+  end
+
   create_table "artists", force: :cascade do |t|
-    t.string "country", null: false
+    t.string "country"
     t.datetime "created_at", null: false
     t.text "details"
     t.string "hometown"
@@ -24,7 +35,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_03_142201) do
 
   create_table "collection_entries", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.text "notes", null: false
+    t.text "notes"
     t.integer "record_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
@@ -44,7 +55,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_03_142201) do
   create_table "record_genres", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "genre_id", null: false
-    t.text "notes", null: false
+    t.text "notes"
     t.boolean "primary_genre", default: false, null: false
     t.integer "record_id", null: false
     t.datetime "updated_at", null: false
@@ -86,6 +97,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_03_142201) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "artist_genres", "artists"
+  add_foreign_key "artist_genres", "genres"
   add_foreign_key "collection_entries", "records"
   add_foreign_key "collection_entries", "users"
   add_foreign_key "record_genres", "genres"

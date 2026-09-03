@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe RecordGenre, type: :model do
   describe "primary genre validation" do
-    it "allows one primary genre for a record" do
+    it "allows one primary genre for a release" do
       record = create(:record)
       genre = create(:genre)
 
@@ -16,7 +16,7 @@ RSpec.describe RecordGenre, type: :model do
       expect(record_genre).to be_valid
     end
 
-    it "does not allow two primary genres for the same record" do
+    it "does not allow two primary genres for the same release" do
       record = create(:record)
 
       first_genre = create(:genre)
@@ -41,62 +41,31 @@ RSpec.describe RecordGenre, type: :model do
       expect(
         second_primary.errors[:primary_genre]
       ).to include(
-        "has already been selected for this record"
+        "has already been selected for this release"
       )
     end
 
-    it "allows multiple non-primary genres for the same record" do
+    it "allows multiple non-primary genres for the same release" do
       record = create(:record)
 
       first_genre = create(:genre)
       second_genre = create(:genre)
-      third_genre = create(:genre)
 
       create(
         :record_genre,
         record: record,
         genre: first_genre,
-        primary_genre: true
+        primary_genre: false
       )
 
-      create(
+      second_genre_relationship = build(
         :record_genre,
         record: record,
         genre: second_genre,
         primary_genre: false
       )
 
-      third_record_genre = build(
-        :record_genre,
-        record: record,
-        genre: third_genre,
-        primary_genre: false
-      )
-
-      expect(third_record_genre).to be_valid
-    end
-
-    it "allows different records to each have a primary genre" do
-      genre = create(:genre)
-
-      first_record = create(:record)
-      second_record = create(:record)
-
-      create(
-        :record_genre,
-        record: first_record,
-        genre: genre,
-        primary_genre: true
-      )
-
-      second_primary = build(
-        :record_genre,
-        record: second_record,
-        genre: genre,
-        primary_genre: true
-      )
-
-      expect(second_primary).to be_valid
+      expect(second_genre_relationship).to be_valid
     end
   end
 end

@@ -68,8 +68,13 @@ RSpec.describe "CollectionEntries", type: :request do
 
       get "/collection_entries"
 
-      expect(response.body).to include("My Favorite Record")
-      expect(response.body).not_to include("Someone Else Record")
+      expect(response.body).to include(
+        "My Favorite Record"
+      )
+
+      expect(response.body).not_to include(
+        "Someone Else Record"
+      )
     end
   end
 
@@ -91,8 +96,14 @@ RSpec.describe "CollectionEntries", type: :request do
       get "/records/#{record.id}/collection_entries/new"
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Midnight Marauders")
-      expect(response.body).to include("Save to My Collection")
+
+      expect(response.body).to include(
+        "Midnight Marauders"
+      )
+
+      expect(response.body).to include(
+        "Save to My Collection"
+      )
     end
   end
 
@@ -120,12 +131,17 @@ RSpec.describe "CollectionEntries", type: :request do
 
       expect(collection_entry.user).to eq(user)
       expect(collection_entry.record).to eq(record)
-      expect(collection_entry.notes).to eq("One of my favorites.")
 
-      expect(response).to redirect_to(collection_entries_path)
+      expect(collection_entry.notes).to eq(
+        "One of my favorites."
+      )
+
+      expect(response).to redirect_to(
+        collection_entries_path
+      )
     end
 
-    it "does not create a collection entry with invalid information" do
+    it "allows a record to be saved without notes" do
       user = create(
         :user,
         password: "password",
@@ -142,10 +158,45 @@ RSpec.describe "CollectionEntries", type: :request do
             notes: ""
           }
         }
+      }.to change(CollectionEntry, :count).by(1)
+
+      collection_entry = CollectionEntry.last
+
+      expect(collection_entry.notes).to eq("")
+
+      expect(response).to redirect_to(
+        collection_entries_path
+      )
+    end
+
+    it "does not allow the same release to be saved twice" do
+      user = create(
+        :user,
+        password: "password",
+        password_confirmation: "password"
+      )
+
+      record = create(:record)
+
+      create(
+        :collection_entry,
+        user: user,
+        record: record
+      )
+
+      log_in(user)
+
+      expect {
+        post "/records/#{record.id}/collection_entries", params: {
+          collection_entry: {
+            notes: "Trying to save it twice"
+          }
+        }
       }.not_to change(CollectionEntry, :count)
 
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.body).to include("Notes can&#39;t be blank")
+      expect(response).to have_http_status(
+        :unprocessable_content
+      )
     end
   end
 
@@ -168,7 +219,10 @@ RSpec.describe "CollectionEntries", type: :request do
       get "/collection_entries/#{collection_entry.id}/edit"
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Original notes")
+
+      expect(response.body).to include(
+        "Original notes"
+      )
     end
 
     it "does not allow a user to edit another user's entry" do
@@ -189,7 +243,9 @@ RSpec.describe "CollectionEntries", type: :request do
 
       get "/collection_entries/#{other_entry.id}/edit"
 
-      expect(response).to have_http_status(:not_found)
+      expect(response).to have_http_status(
+        :not_found
+      )
     end
   end
 
@@ -217,11 +273,16 @@ RSpec.describe "CollectionEntries", type: :request do
 
       collection_entry.reload
 
-      expect(collection_entry.notes).to eq("Updated notes")
-      expect(response).to redirect_to(collection_entries_path)
+      expect(collection_entry.notes).to eq(
+        "Updated notes"
+      )
+
+      expect(response).to redirect_to(
+        collection_entries_path
+      )
     end
 
-    it "does not update a collection entry with invalid information" do
+    it "allows a user to clear their note" do
       user = create(
         :user,
         password: "password",
@@ -244,9 +305,11 @@ RSpec.describe "CollectionEntries", type: :request do
 
       collection_entry.reload
 
-      expect(collection_entry.notes).to eq("Original notes")
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.body).to include("Notes can&#39;t be blank")
+      expect(collection_entry.notes).to eq("")
+
+      expect(response).to redirect_to(
+        collection_entries_path
+      )
     end
 
     it "does not allow a user to update another user's collection entry" do
@@ -274,8 +337,13 @@ RSpec.describe "CollectionEntries", type: :request do
 
       other_entry.reload
 
-      expect(other_entry.notes).to eq("Original notes")
-      expect(response).to have_http_status(:not_found)
+      expect(other_entry.notes).to eq(
+        "Original notes"
+      )
+
+      expect(response).to have_http_status(
+        :not_found
+      )
     end
   end
 
@@ -298,7 +366,9 @@ RSpec.describe "CollectionEntries", type: :request do
         delete "/collection_entries/#{collection_entry.id}"
       }.to change(CollectionEntry, :count).by(-1)
 
-      expect(response).to redirect_to(collection_entries_path)
+      expect(response).to redirect_to(
+        collection_entries_path
+      )
     end
 
     it "does not allow a user to delete another user's collection entry" do
@@ -321,7 +391,9 @@ RSpec.describe "CollectionEntries", type: :request do
         delete "/collection_entries/#{other_entry.id}"
       }.not_to change(CollectionEntry, :count)
 
-      expect(response).to have_http_status(:not_found)
+      expect(response).to have_http_status(
+        :not_found
+      )
     end
   end
 end

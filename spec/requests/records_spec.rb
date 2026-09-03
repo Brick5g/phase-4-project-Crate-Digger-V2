@@ -79,6 +79,29 @@ RSpec.describe "Records", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Add a Release")
     end
+
+    it "shows genre controls on the new release form" do
+      log_in_user
+
+      create(
+        :genre,
+        name: "Hip-Hop"
+      )
+
+      create(
+        :genre,
+        name: "R&B"
+      )
+
+      get "/records/new"
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Primary Genre")
+      expect(response.body).to include("Additional Genres")
+      expect(response.body).to include("Genre Not Listed?")
+      expect(response.body).to include("Hip-Hop")
+      expect(response.body).to include("R&amp;B")
+    end
   end
 
   describe "POST /records" do
@@ -98,9 +121,15 @@ RSpec.describe "Records", type: :request do
             release_type: "Album",
             description: "A classic hip-hop album.",
             artist_id: artist.id
-          }
+          },
+          primary_genre_id: "",
+          subgenre_ids: [],
+          new_genre_name: ""
         }
-      }.to change(Record, :count).by(1)
+      }.to change(
+        Record,
+        :count
+      ).by(1)
 
       record = Record.last
 
@@ -110,7 +139,9 @@ RSpec.describe "Records", type: :request do
       expect(record.description).to eq("A classic hip-hop album.")
       expect(record.artist).to eq(artist)
 
-      expect(response).to redirect_to(record_path(record))
+      expect(response).to redirect_to(
+        record_path(record)
+      )
     end
 
     it "does not create a record with invalid information" do
@@ -124,13 +155,383 @@ RSpec.describe "Records", type: :request do
             title: "",
             release_type: "",
             artist_id: artist.id
-          }
+          },
+          primary_genre_id: "",
+          subgenre_ids: [],
+          new_genre_name: ""
         }
-      }.not_to change(Record, :count)
+      }.not_to change(
+        Record,
+        :count
+      )
 
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.body).to include("Title can&#39;t be blank")
-      expect(response.body).to include("Release type can&#39;t be blank")
+      expect(response).to have_http_status(
+        :unprocessable_content
+      )
+
+      expect(response.body).to include(
+        "Title can&#39;t be blank"
+      )
+
+      expect(response.body).to include(
+        "Release type can&#39;t be blank"
+      )
+    end
+
+    it "creates a record with one primary genre" do
+      log_in_user
+
+      artist = create(:artist)
+
+      hip_hop = create(
+        :genre,
+        name: "Hip-Hop"
+      )
+
+      post "/records", params: {
+        record: {
+          title: "The Low End Theory",
+          release_type: "Album",
+          artist_id: artist.id
+        },
+        primary_genre_id: hip_hop.id,
+        subgenre_ids: [],
+        new_genre_name: ""
+      }
+
+      record = Record.last
+
+      record_genre =
+        record.record_genres.find_by(
+          genre: hip_hop
+        )
+
+      expect(record_genre).to be_present
+
+      expect(
+        record_genre.primary_genre
+      ).to be(true)
+
+      expect(response).to redirect_to(
+        record_path(record)
+      )
+    end
+
+    it "creates a record with multiple additional genres" do
+      log_in_user
+
+      artist = create(:artist)
+
+      hip_hop = create(
+        :genre,
+        name: "Hip-Hop"
+      )
+
+      jazz_rap = create(
+        :genre,
+        name: "Jazz Rap"
+      )
+
+      alternative_hip_hop = create(
+        :genre,
+        name: "Alternative Hip-Hop"
+      )
+
+      post "/records", params: {
+        record: {
+          title: "Midnight Marauders",
+          release_type: "Album",
+          artist_id: artist.id
+        },
+        primary_genre_id: hip_hop.id,
+        subgenre_ids: [
+          jazz_rap.id,
+          alternative_hip_hop.id
+        ],
+        new_genre_name: ""
+      }
+
+      record = Record.last
+
+      primary_record_genre =
+        record.record_genres.find_by(
+          genre: hip_hop
+        )
+
+      additional_record_genres =
+        record.record_genres.where(
+          primary_genre: false
+        )
+
+      expect(
+        primary_record_genre.primary_genre
+      ).to be(true)
+
+      expect(
+        additional_record_genres.map(&:genre)
+      ).to contain_exactly(
+        jazz_rap,
+        alternative_hip_hop
+      )
+    end
+
+    it "creates a missing genre as an additional genre" do
+      log_in_user
+
+      artist = create(:artist)
+
+      hip_hop = create(
+        :genre,
+        name: "Hip-Hop"
+      )
+
+      expect {
+        post "/records", params: {
+          record: {
+            title: "New Release",
+            release_type: "Album",
+            artist_id: artist.id
+          },
+          primary_genre_id: hip_hop.id,
+          subgenre_ids: [],
+          new_genre_name: "Neo Soul"
+        }
+      }.to change(
+        Genre,
+        :count
+      ).by(1)
+
+      record = Record.last
+
+      neo_soul = Genre.find_by(
+        name: "Neo Soul"
+      )
+
+      expect(neo_soul).to be_present
+
+      record_genre =
+        record.record_genres.find_by(
+          genre: neo_soul
+        )
+
+      expect(record_genre).to be_present
+
+      expect(
+        record_genre.primary_genre
+      ).to be(false)
+    end
+
+    it "uses a new genre as the primary genre when no primary genre was selected" do
+      log_in_user
+
+      artist = create(:artist)
+
+      post "/records", params: {
+        record: {
+          title: "New Release",
+          release_type: "Album",
+          artist_id: artist.id
+        },
+        primary_genre_id: "",
+        subgenre_ids: [],
+        new_genre_name: "Neo Soul"
+      }
+
+      record = Record.last
+
+      neo_soul = Genre.find_by(
+        name: "Neo Soul"
+      )
+
+      primary_record_genre =
+        record.record_genres.find_by(
+          primary_genre: true
+        )
+
+      expect(neo_soul).to be_present
+
+      expect(
+        primary_record_genre.genre
+      ).to eq(
+        neo_soul
+      )
+    end
+
+    it "reuses an existing genre when the custom genre has different formatting" do
+      log_in_user
+
+      artist = create(:artist)
+
+      hip_hop = create(
+        :genre,
+        name: "Hip-Hop"
+      )
+
+      expect {
+        post "/records", params: {
+          record: {
+            title: "New Release",
+            release_type: "Album",
+            artist_id: artist.id
+          },
+          primary_genre_id: "",
+          subgenre_ids: [],
+          new_genre_name: "hip_hop"
+        }
+      }.not_to change(
+        Genre,
+        :count
+      )
+
+      record = Record.last
+
+      expect(
+        record.genres
+      ).to include(
+        hip_hop
+      )
+
+      expect(
+        record.record_genres.find_by(
+          genre: hip_hop
+        ).primary_genre
+      ).to be(true)
+    end
+
+    it "does not duplicate a primary genre that was also selected as an additional genre" do
+      log_in_user
+
+      artist = create(:artist)
+
+      hip_hop = create(
+        :genre,
+        name: "Hip-Hop"
+      )
+
+      post "/records", params: {
+        record: {
+          title: "New Release",
+          release_type: "Album",
+          artist_id: artist.id
+        },
+        primary_genre_id: hip_hop.id,
+        subgenre_ids: [
+          hip_hop.id
+        ],
+        new_genre_name: ""
+      }
+
+      record = Record.last
+
+      expect(
+        record.record_genres.where(
+          genre: hip_hop
+        ).count
+      ).to eq(1)
+
+      expect(
+        record.record_genres.find_by(
+          genre: hip_hop
+        ).primary_genre
+      ).to be(true)
+    end
+
+    it "rejects typing the same genre as the selected primary genre" do
+      log_in_user
+
+      artist = create(:artist)
+
+      hip_hop = create(
+        :genre,
+        name: "Hip-Hop"
+      )
+
+      expect {
+        post "/records", params: {
+          record: {
+            title: "New Release",
+            release_type: "Album",
+            artist_id: artist.id
+          },
+          primary_genre_id: hip_hop.id,
+          subgenre_ids: [],
+          new_genre_name: "hip hop"
+        }
+      }.not_to change(
+        Record,
+        :count
+      )
+
+      expect(response).to have_http_status(
+        :unprocessable_content
+      )
+
+      expect(response.body).to include(
+        "cannot be the same as the primary genre"
+      )
+    end
+
+    it "does not create a custom genre when the record itself is invalid" do
+      log_in_user
+
+      artist = create(:artist)
+
+      expect {
+        post "/records", params: {
+          record: {
+            title: "",
+            release_type: "",
+            artist_id: artist.id
+          },
+          primary_genre_id: "",
+          subgenre_ids: [],
+          new_genre_name: "Future Funk"
+        }
+      }.not_to change(
+        Genre,
+        :count
+      )
+
+      expect(
+        Genre.find_by(
+          name: "Future Funk"
+        )
+      ).to be_nil
+
+      expect(response).to have_http_status(
+        :unprocessable_content
+      )
+    end
+
+    it "does not create genre associations when the record itself is invalid" do
+      log_in_user
+
+      artist = create(:artist)
+
+      hip_hop = create(
+        :genre,
+        name: "Hip-Hop"
+      )
+
+      expect {
+        post "/records", params: {
+          record: {
+            title: "",
+            release_type: "",
+            artist_id: artist.id
+          },
+          primary_genre_id: hip_hop.id,
+          subgenre_ids: [],
+          new_genre_name: ""
+        }
+      }.not_to change(
+        RecordGenre,
+        :count
+      )
+
+      expect(response).to have_http_status(
+        :unprocessable_content
+      )
     end
   end
 
@@ -172,9 +573,13 @@ RSpec.describe "Records", type: :request do
 
       expect(record.title).to eq("Updated Title")
       expect(record.release_type).to eq("EP")
-      expect(record.release_date).to eq(Date.new(2026, 8, 1))
+      expect(record.release_date).to eq(
+        Date.new(2026, 8, 1)
+      )
 
-      expect(response).to redirect_to(record_path(record))
+      expect(response).to redirect_to(
+        record_path(record)
+      )
     end
 
     it "does not update a record with invalid information" do
@@ -194,9 +599,17 @@ RSpec.describe "Records", type: :request do
 
       record.reload
 
-      expect(record.title).to eq("Original Title")
-      expect(response).to have_http_status(:unprocessable_content)
-      expect(response.body).to include("Title can&#39;t be blank")
+      expect(record.title).to eq(
+        "Original Title"
+      )
+
+      expect(response).to have_http_status(
+        :unprocessable_content
+      )
+
+      expect(response.body).to include(
+        "Title can&#39;t be blank"
+      )
     end
   end
 
@@ -208,9 +621,14 @@ RSpec.describe "Records", type: :request do
 
       expect {
         delete "/records/#{record.id}"
-      }.to change(Record, :count).by(-1)
+      }.to change(
+        Record,
+        :count
+      ).by(-1)
 
-      expect(response).to redirect_to(records_path)
+      expect(response).to redirect_to(
+        records_path
+      )
     end
   end
 end

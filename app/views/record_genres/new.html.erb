@@ -1,49 +1,93 @@
-<h1>Add Genre to <%= @record.title %></h1>
+<h1>Choose Release Genres</h1>
+
+<h2><%= @record.title %></h2>
 
 <p>
-  Choose a genre to associate with this record.
-  Mark it as the primary genre if it best represents the record's overall style.
+  Choose the musical styles that best describe this release.
 </p>
 
 <p>
-  Use the notes field for any extra information about this genre connection.
+  Choose one genre as the main genre. You can also select as many
+  additional genres as you need.
 </p>
 
-<% if @record_genre.errors.any? %>
+<% if @error.present? %>
   <div>
-    <h2>Please fix the following:</h2>
+    <h2>We could not save these genres:</h2>
 
-    <ul>
-      <% @record_genre.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
+    <p>
+      <%= @error %>
+    </p>
   </div>
 <% end %>
 
-<%= form_with model: [ @record, @record_genre ] do |form| %>
-  <div>
-    <%= form.label :genre_id, "Genre" %>
-    <%= form.collection_select :genre_id, @genres, :id, :name %>
-  </div>
+<%= form_with url: record_record_genres_path(@record),
+              method: :post do %>
 
-  <div>
-    <%= form.label :primary_genre, "Primary Genre" %>
-    <%= form.check_box :primary_genre %>
-  </div>
+  <h2>Primary Genre</h2>
 
-  <div>
-    <%= form.label :notes %>
-    <%= form.text_area :notes %>
-  </div>
+  <p>
+    Pick the single genre that best describes this release.
+  </p>
 
-  <%= form.submit "Add Genre" %>
+  <%= select_tag :primary_genre_id,
+                 options_from_collection_for_select(
+                   @genres,
+                   :id,
+                   :name,
+                   @primary_record_genre&.genre_id
+                 ),
+                 include_blank: "No primary genre selected" %>
+
+  <h2>Additional Genres</h2>
+
+  <p>
+    Select any other genres that also describe this release.
+  </p>
+
+  <% if @genres.any? %>
+    <% @genres.each do |genre| %>
+      <div>
+        <%= check_box_tag "subgenre_ids[]",
+                          genre.id,
+                          @additional_genre_ids.include?(genre.id),
+                          id: "subgenre_#{genre.id}" %>
+
+        <%= label_tag "subgenre_#{genre.id}",
+                      genre.name %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>
+      There are no genres in Crate Digger yet.
+    </p>
+  <% end %>
+
+  <h2>Genre Not Listed?</h2>
+
+  <p>
+    Type one new genre here. Leave this blank if everything you need
+    is already listed above.
+  </p>
+
+  <%= text_field_tag :new_genre_name,
+                     params[:new_genre_name],
+                     placeholder: "Example: Neo Soul" %>
+
+  <p>
+    If you have not selected a primary genre above, the new genre you
+    type here will become the primary genre.
+  </p>
+
+  <%= submit_tag "Save Release Genres" %>
 <% end %>
 
 <p>
-  <%= link_to "Back to Record", record_path(@record) %>
+  <%= link_to "Back to Release",
+              record_path(@record) %>
 </p>
 
 <p>
-  <%= link_to "Home", root_path %>
+  <%= link_to "Home",
+              root_path %>
 </p>

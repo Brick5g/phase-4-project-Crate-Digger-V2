@@ -1,8 +1,18 @@
 class Artist < ApplicationRecord
-  has_many :records, dependent: :destroy
+  has_many :records,
+           dependent: :destroy
 
-  validates :name, presence: true, uniqueness: true
-  validates :country, presence: true
+  has_many :artist_genres,
+           dependent: :destroy
+
+  has_many :genres,
+           through: :artist_genres
+
+  validates :name,
+            presence: true,
+            uniqueness: {
+              case_sensitive: false
+            }
 
   validates :musicbrainz_id,
             uniqueness: true,

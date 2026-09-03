@@ -2,10 +2,12 @@
 
 <h2>Artist Information</h2>
 
-<p>
-  Country:
-  <%= @artist.country %>
-</p>
+<% if @artist.country.present? %>
+  <p>
+    Country:
+    <%= @artist.country %>
+  </p>
+<% end %>
 
 <% if @artist.hometown.present? %>
   <p>
@@ -16,8 +18,36 @@
 
 <% if @artist.details.present? %>
   <p>
-    About:
     <%= @artist.details %>
+  </p>
+<% end %>
+
+<h2>Genres</h2>
+
+<% primary_artist_genre = @artist.artist_genres.find_by(primary_genre: true) %>
+
+<% if primary_artist_genre %>
+  <p>
+    <strong>Primary Genre:</strong>
+    <%= primary_artist_genre.genre.name %>
+  </p>
+<% end %>
+
+<% additional_artist_genres = @artist.artist_genres.where(primary_genre: false) %>
+
+<% if additional_artist_genres.any? %>
+  <p>
+    <strong>Additional Genres:</strong>
+  </p>
+
+  <% additional_artist_genres.each do |artist_genre| %>
+    <p>
+      <%= artist_genre.genre.name %>
+    </p>
+  <% end %>
+<% elsif primary_artist_genre.nil? %>
+  <p>
+    No genres have been added for this artist yet.
   </p>
 <% end %>
 
@@ -28,12 +58,13 @@
     <div>
       <% if record.artwork_url.present? %>
         <%= image_tag record.artwork_url,
-                      alt: "#{record.title} cover" %>
+                      alt: "#{record.title} cover",
+                      width: 150,
+                      onerror: "this.style.display='none'" %>
       <% end %>
 
       <h3>
-        <%= link_to record.title,
-                    record_path(record) %>
+        <%= link_to record.title, record_path(record) %>
       </h3>
 
       <p>
@@ -53,18 +84,27 @@
   </p>
 <% end %>
 
+<h2>Artist Management</h2>
+
 <% if current_user %>
   <p>
-    <%= link_to "Edit Artist",
-                edit_artist_path(@artist) %>
+    Use these options if this artist's information needs to be updated.
+  </p>
+
+  <p>
+    <%= link_to "Edit Artist", edit_artist_path(@artist) %>
   </p>
 
   <%= button_to "Delete Artist",
                 artist_path(@artist),
                 method: :delete,
                 data: {
-                  turbo_confirm: "Delete this artist?"
+                  turbo_confirm: "Delete #{@artist.name}? Releases connected to this artist will also be removed."
                 } %>
+<% else %>
+  <p>
+    Log in to edit or delete artist information.
+  </p>
 <% end %>
 
 <p>
