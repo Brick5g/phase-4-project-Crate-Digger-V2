@@ -43,11 +43,6 @@ a:hover {
   color: #8c3b2f;
 }
 
-/*
- * Most navigation links in the application
- * are inside their own paragraph.
- */
-
 p > a {
   display: inline-block;
   padding: 10px 16px;
@@ -135,10 +130,6 @@ body > img {
   min-height: 100vh;
   display: flex;
   overflow: hidden;
-
-  /*
-   * Removes the normal body padding from the homepage.
-   */
   margin: -35px;
 }
 
@@ -330,7 +321,107 @@ body > img {
   padding: 40px;
 }
 
+/* COLLECTION */
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+  margin-top: 40px;
+}
+
+.collection-card {
+  min-width: 0;
+}
+
+.collection-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.collection-cover-missing {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #1f1f1f;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.collection-info h2 {
+  margin-top: 18px;
+  margin-bottom: 5px;
+  font-size: 24px;
+}
+
+.collection-artist {
+  margin-top: 0;
+  font-size: 17px;
+}
+
+.collection-rating {
+  margin-top: 10px;
+}
+
+.collection-note {
+  padding: 12px;
+  border-left: 4px solid #8c3b2f;
+  margin: 15px 0;
+}
+
+.collection-note p {
+  margin-bottom: 0;
+}
+
+.collection-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.collection-link {
+  display: inline-block;
+  padding: 9px 12px;
+  border: 2px solid #1f1f1f;
+  color: #1f1f1f;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.collection-link:hover {
+  background-color: #1f1f1f;
+  color: white;
+}
+
+.collection-actions form {
+  margin: 0;
+}
+
+.collection-remove-button {
+  padding: 9px 12px;
+  font-size: 14px;
+  background-color: transparent;
+  color: #1f1f1f;
+}
+
+.collection-remove-button:hover {
+  background-color: #8c3b2f;
+  border-color: #8c3b2f;
+  color: white;
+}
+
 /* MOBILE */
+
+@media (max-width: 900px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 @media (max-width: 800px) {
   body {
@@ -364,5 +455,11 @@ body > img {
 
   h1 {
     font-size: 36px;
+  }
+}
+
+@media (max-width: 600px) {
+  .collection-grid {
+    grid-template-columns: 1fr;
   }
 }
