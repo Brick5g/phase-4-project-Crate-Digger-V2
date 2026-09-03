@@ -18,72 +18,93 @@
 </p>
 
 <% if @collection_entries.any? %>
-  <% @collection_entries.each do |entry| %>
-    <div>
-      <% if entry.record.artwork_url.present? %>
-        <%= image_tag entry.record.artwork_url,
-                      alt: "#{entry.record.title} cover" %>
-      <% end %>
+  <div class="collection-grid">
+    <% @collection_entries.each do |entry| %>
+      <div class="collection-card">
+        <% if entry.record.artwork_url.present? %>
+          <%= image_tag entry.record.artwork_url,
+                        alt: "#{entry.record.title} cover",
+                        class: "collection-cover" %>
+        <% else %>
+          <div class="collection-cover-missing">
+            No Artwork
+          </div>
+        <% end %>
 
-      <h2>
-        <%= entry.record.title %>
-      </h2>
+        <div class="collection-info">
+          <h2>
+            <%= entry.record.title %>
+          </h2>
 
-      <p>
-        Artist:
-        <%= entry.record.artist.name %>
-      </p>
+          <p class="collection-artist">
+            <%= entry.record.artist.name %>
+          </p>
 
-      <% review = current_user.reviews.find_by(record: entry.record) %>
+          <% review = current_user.reviews.find_by(record: entry.record) %>
 
-      <% if review %>
-        <p>
-          My Rating:
-          <%= review.rating %> / 10
-        </p>
-      <% else %>
-        <p>
-          You have not rated this release yet.
-        </p>
+          <% if review %>
+            <p class="collection-rating">
+              My Rating:
+              <strong><%= review.rating %> / 10</strong>
+            </p>
+          <% else %>
+            <p>
+              You have not rated this release yet.
+            </p>
 
-        <p>
-          <%= link_to "Rate This Release",
-                      new_record_review_path(entry.record) %>
-        </p>
-      <% end %>
+            <p>
+              <%= link_to "Rate This Release",
+                          new_record_review_path(entry.record) %>
+            </p>
+          <% end %>
 
-      <% if entry.notes.present? %>
-        <p>
-          My Note:
-          <%= entry.notes %>
-        </p>
-      <% end %>
+          <% if entry.notes.present? %>
+            <div class="collection-note">
+              <strong>My Note:</strong>
 
-      <p>
-        <%= link_to "View Release", record_path(entry.record) %>
-      </p>
+              <p>
+                <%= entry.notes %>
+              </p>
+            </div>
+          <% end %>
 
-      <p>
-        <%= link_to "Edit My Note",
-                    edit_collection_entry_path(entry) %>
-      </p>
+          <div class="collection-actions">
+            <%= link_to "View Release",
+                        record_path(entry.record),
+                        class: "collection-link" %>
 
-      <%= button_to "Remove from My Collection",
-                    collection_entry_path(entry),
-                    method: :delete,
-                    data: {
-                      turbo_confirm: "Remove this release from your collection?"
-                    } %>
-    </div>
-  <% end %>
+            <%= link_to "Edit My Note",
+                        edit_collection_entry_path(entry),
+                        class: "collection-link" %>
+
+            <%= button_to "Remove",
+                          collection_entry_path(entry),
+                          method: :delete,
+                          class: "collection-remove-button",
+                          data: {
+                            turbo_confirm: "Remove this release from your collection?"
+                          } %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 <% else %>
-  <h2>Your collection is empty.</h2>
+  <h2>Your Collection Is Empty</h2>
 
   <p>
-    That's okay! Start by browsing releases and saving something you like.
+    You have not saved any releases yet.
+  </p>
+
+  <p>
+    Start by browsing releases or searching for music.
   </p>
 
   <p>
     <%= link_to "Browse Releases", records_path %>
+  </p>
+
+  <p>
+    <%= link_to "Search for Music", music_search_path %>
   </p>
 <% end %>
