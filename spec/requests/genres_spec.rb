@@ -1,6 +1,21 @@
 require "rails_helper"
 
 RSpec.describe "Genres", type: :request do
+  def log_in_user
+    user = create(
+      :user,
+      password: "password",
+      password_confirmation: "password"
+    )
+
+    post "/login", params: {
+      email: user.email,
+      password: "password"
+    }
+
+    user
+  end
+
   describe "GET /genres" do
     it "returns a successful response" do
       get "/genres"
@@ -56,7 +71,9 @@ RSpec.describe "Genres", type: :request do
   end
 
   describe "GET /genres/new" do
-    it "shows the new genre form" do
+    it "shows the new genre form to a logged in user" do
+      log_in_user
+
       get "/genres/new"
 
       expect(response).to have_http_status(:ok)
@@ -65,6 +82,8 @@ RSpec.describe "Genres", type: :request do
 
   describe "POST /genres" do
     it "creates a genre with valid information" do
+      log_in_user
+
       expect {
         post "/genres", params: {
           genre: {
@@ -81,6 +100,8 @@ RSpec.describe "Genres", type: :request do
     end
 
     it "does not create an invalid genre" do
+      log_in_user
+
       expect {
         post "/genres", params: {
           genre: {
@@ -97,6 +118,8 @@ RSpec.describe "Genres", type: :request do
 
   describe "GET /genres/:id/edit" do
     it "shows the edit form" do
+      log_in_user
+
       genre = create(:genre, name: "Jazz")
 
       get "/genres/#{genre.id}/edit"
@@ -108,6 +131,8 @@ RSpec.describe "Genres", type: :request do
 
   describe "PATCH /genres/:id" do
     it "updates a genre with valid information" do
+      log_in_user
+
       genre = create(:genre, name: "Old Genre")
 
       patch "/genres/#{genre.id}", params: {
@@ -123,6 +148,8 @@ RSpec.describe "Genres", type: :request do
     end
 
     it "does not update a genre with invalid information" do
+      log_in_user
+
       genre = create(:genre, name: "Jazz")
 
       patch "/genres/#{genre.id}", params: {
@@ -141,6 +168,8 @@ RSpec.describe "Genres", type: :request do
 
   describe "DELETE /genres/:id" do
     it "deletes the selected genre" do
+      log_in_user
+
       genre = create(:genre)
 
       expect {

@@ -1,12 +1,17 @@
-<h1>Add a New Record</h1>
+<h1>Add a Release</h1>
 
 <p>
-  Add a record to the Crate Digger database.
-  Choose an existing artist and enter the record's basic release information.
+  Add a music release to Crate Digger.
 </p>
 
 <p>
-  If the artist is not listed yet, add the artist first before creating the record.
+  A release can be an album, EP, single, mixtape, or another published
+  music project.
+</p>
+
+<p>
+  Don't worry if you do not know every detail.
+  Some information can be filled in automatically when music search is added.
 </p>
 
 <% if @record.errors.any? %>
@@ -23,23 +28,8 @@
 
 <%= form_with model: @record do |form| %>
   <div>
-    <%= form.label :title %>
+    <%= form.label :title, "Release Title" %>
     <%= form.text_field :title %>
-  </div>
-
-  <div>
-    <%= form.label :release_year %>
-    <%= form.number_field :release_year %>
-  </div>
-
-  <div>
-    <%= form.label :format %>
-    <%= form.text_field :format %>
-  </div>
-
-  <div>
-    <%= form.label :condition %>
-    <%= form.text_field :condition %>
   </div>
 
   <div>
@@ -47,15 +37,33 @@
     <%= form.collection_select :artist_id, @artists, :id, :name %>
   </div>
 
-  <%= form.submit "Create Record" %>
+  <div>
+    <%= form.label :release_date, "Release Date" %>
+    <%= form.date_field :release_date %>
+  </div>
+
+  <div>
+    <%= form.label :release_type, "Release Type" %>
+
+    <%= form.select :release_type,
+                    [ "Album", "EP", "Single", "Mixtape", "Other" ] %>
+  </div>
+
+  <div>
+    <%= form.label :description, "Description (Optional)" %>
+    <%= form.text_area :description %>
+  </div>
+
+  <%= form.submit "Add Release" %>
 <% end %>
 
 <p>
-  <%= link_to "Add New Artist", new_artist_path %>
+  Can't find the artist?
+  <%= link_to "Add the Artist First", new_artist_path %>
 </p>
 
 <p>
-  <%= link_to "Back to Records", records_path %>
+  <%= link_to "Back to Releases", records_path %>
 </p>
 
 <p>

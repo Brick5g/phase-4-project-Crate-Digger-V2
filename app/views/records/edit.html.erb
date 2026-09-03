@@ -1,8 +1,13 @@
-<h1>Edit Record</h1>
+<h1>Edit Release</h1>
 
 <p>
-  Update the shared information for this record.
-  Changes here affect the record itself, not your personal collection notes.
+  Update the shared information for
+  <strong><%= @record.title %></strong>.
+</p>
+
+<p>
+  These changes affect the release information everyone sees.
+  They do not change anyone's personal review.
 </p>
 
 <% if @record.errors.any? %>
@@ -19,23 +24,8 @@
 
 <%= form_with model: @record do |form| %>
   <div>
-    <%= form.label :title %>
+    <%= form.label :title, "Release Title" %>
     <%= form.text_field :title %>
-  </div>
-
-  <div>
-    <%= form.label :release_year %>
-    <%= form.number_field :release_year %>
-  </div>
-
-  <div>
-    <%= form.label :format %>
-    <%= form.text_field :format %>
-  </div>
-
-  <div>
-    <%= form.label :condition %>
-    <%= form.text_field :condition %>
   </div>
 
   <div>
@@ -43,11 +33,28 @@
     <%= form.collection_select :artist_id, @artists, :id, :name %>
   </div>
 
-  <%= form.submit "Update Record" %>
+  <div>
+    <%= form.label :release_date, "Release Date" %>
+    <%= form.date_field :release_date %>
+  </div>
+
+  <div>
+    <%= form.label :release_type, "Release Type" %>
+
+    <%= form.select :release_type,
+                    [ "Album", "EP", "Single", "Mixtape", "Other" ] %>
+  </div>
+
+  <div>
+    <%= form.label :description, "Description (Optional)" %>
+    <%= form.text_area :description %>
+  </div>
+
+  <%= form.submit "Update Release" %>
 <% end %>
 
 <p>
-  <%= link_to "Back to Record", record_path(@record) %>
+  <%= link_to "Back to Release", record_path(@record) %>
 </p>
 
 <p>

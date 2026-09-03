@@ -1,4 +1,6 @@
 class RecordGenresController < ApplicationController
+  before_action :require_login
+
   def new
     @record = Record.find(params[:record_id])
     @record_genre = @record.record_genres.new

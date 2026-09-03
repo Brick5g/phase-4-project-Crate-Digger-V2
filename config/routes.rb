@@ -15,8 +15,10 @@ Rails.application.routes.draw do
   resources :records, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
     resources :collection_entries, only: [ :new, :create ]
     resources :record_genres, only: [ :new, :create ]
+    resources :reviews, only: [ :new, :create ]
   end
 
   resources :collection_entries, only: [ :index, :edit, :update, :destroy ]
   resources :record_genres, only: [ :destroy ]
+  resources :reviews, only: [ :edit, :update, :destroy ]
 end

@@ -1,4 +1,7 @@
 class RecordsController < ApplicationController
+  before_action :require_login,
+                only: [ :new, :create, :edit, :update, :destroy ]
+
   def index
     @records = Record.alphabetical
   end
@@ -51,9 +54,11 @@ class RecordsController < ApplicationController
   def record_params
     params.require(:record).permit(
       :title,
-      :release_year,
-      :format,
-      :condition,
+      :release_date,
+      :release_type,
+      :description,
+      :artwork_url,
+      :musicbrainz_id,
       :artist_id
     )
   end

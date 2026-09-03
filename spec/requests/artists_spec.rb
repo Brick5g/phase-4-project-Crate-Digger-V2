@@ -1,6 +1,21 @@
 require "rails_helper"
 
 RSpec.describe "Artists", type: :request do
+  def log_in_user
+    user = create(
+      :user,
+      password: "password",
+      password_confirmation: "password"
+    )
+
+    post "/login", params: {
+      email: user.email,
+      password: "password"
+    }
+
+    user
+  end
+
   describe "GET /artists" do
     it "returns a successful response" do
       get "/artists"
@@ -51,7 +66,9 @@ RSpec.describe "Artists", type: :request do
   end
 
   describe "GET /artists/new" do
-    it "shows the new artist form" do
+    it "shows the new artist form to a logged in user" do
+      log_in_user
+
       get "/artists/new"
 
       expect(response).to have_http_status(:ok)
@@ -60,6 +77,8 @@ RSpec.describe "Artists", type: :request do
 
   describe "POST /artists" do
     it "creates an artist with valid information" do
+      log_in_user
+
       expect {
         post "/artists", params: {
           artist: {
@@ -76,6 +95,8 @@ RSpec.describe "Artists", type: :request do
     end
 
     it "does not create an artist with invalid information" do
+      log_in_user
+
       expect {
         post "/artists", params: {
           artist: {
@@ -92,6 +113,8 @@ RSpec.describe "Artists", type: :request do
 
   describe "GET /artists/:id/edit" do
     it "shows the edit form for the selected artist" do
+      log_in_user
+
       artist = create(:artist, name: "Nas")
 
       get "/artists/#{artist.id}/edit"
@@ -103,6 +126,8 @@ RSpec.describe "Artists", type: :request do
 
   describe "PATCH /artists/:id" do
     it "updates an artist with valid information" do
+      log_in_user
+
       artist = create(:artist, name: "Old Name")
 
       patch "/artists/#{artist.id}", params: {
@@ -118,6 +143,8 @@ RSpec.describe "Artists", type: :request do
     end
 
     it "does not update an artist with invalid information" do
+      log_in_user
+
       artist = create(:artist, name: "Original Name")
 
       patch "/artists/#{artist.id}", params: {
@@ -136,6 +163,8 @@ RSpec.describe "Artists", type: :request do
 
   describe "DELETE /artists/:id" do
     it "deletes the selected artist" do
+      log_in_user
+
       artist = create(:artist)
 
       expect {

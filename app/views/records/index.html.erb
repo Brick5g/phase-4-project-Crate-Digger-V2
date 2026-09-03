@@ -1,13 +1,13 @@
-<h1>Records</h1>
+<h1>Releases</h1>
 
 <p>
-  Browse all records currently available in Crate Digger.
-  Select a record to view its artist, release information, genres,
-  and collection options.
+  Browse the music currently available in Crate Digger.
+  Select a release to see more information, read reviews,
+  save it to your collection, or leave your own review.
 </p>
 
 <p>
-  <%= link_to "Add New Record", new_record_path %>
+  <%= link_to "Add New Release", new_record_path %>
 </p>
 
 <p>
@@ -17,6 +17,11 @@
 <% if @records.any? %>
   <% @records.each do |record| %>
     <div>
+      <% if record.artwork_url.present? %>
+        <%= image_tag record.artwork_url,
+                      alt: "#{record.title} cover" %>
+      <% end %>
+
       <h2>
         <%= link_to record.title, record_path(record) %>
       </h2>
@@ -27,27 +32,20 @@
       </p>
 
       <p>
-        Release Year:
-        <%= record.release_year %>
+        Release Type:
+        <%= record.release_type %>
       </p>
 
       <p>
-        Format:
-        <%= record.format %>
-      </p>
-
-      <p>
-        Condition:
-        <%= record.condition %>
+        Release Date:
+        <%= record.release_date || "Unknown" %>
       </p>
     </div>
   <% end %>
 <% else %>
-  <p>
-    No records have been added yet.
-  </p>
+  <h2>No releases have been added yet.</h2>
 
   <p>
-    <%= link_to "Add the First Record", new_record_path %>
+    Be the first person to add music to Crate Digger.
   </p>
 <% end %>

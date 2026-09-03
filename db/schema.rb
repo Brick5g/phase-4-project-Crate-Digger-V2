@@ -10,10 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_31_225857) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_03_142201) do
   create_table "artists", force: :cascade do |t|
     t.string "country", null: false
     t.datetime "created_at", null: false
+    t.text "details"
+    t.string "hometown"
+    t.string "musicbrainz_id"
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_artists_on_name", unique: true
@@ -22,7 +25,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_225857) do
   create_table "collection_entries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "notes", null: false
-    t.decimal "purchase_price", precision: 8, scale: 2, null: false
     t.integer "record_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
@@ -53,13 +55,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_225857) do
 
   create_table "records", force: :cascade do |t|
     t.integer "artist_id", null: false
-    t.string "condition", null: false
+    t.string "artwork_url"
     t.datetime "created_at", null: false
-    t.string "format", null: false
-    t.integer "release_year", null: false
+    t.text "description"
+    t.string "musicbrainz_id"
+    t.date "release_date"
+    t.string "release_type"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.index ["artist_id"], name: "index_records_on_artist_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.integer "rating"
+    t.integer "record_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["record_id"], name: "index_reviews_on_record_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -76,4 +91,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_225857) do
   add_foreign_key "record_genres", "genres"
   add_foreign_key "record_genres", "records"
   add_foreign_key "records", "artists"
+  add_foreign_key "reviews", "records"
+  add_foreign_key "reviews", "users"
 end
