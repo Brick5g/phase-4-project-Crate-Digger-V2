@@ -1,0 +1,40 @@
+<h1>Edit Genre</h1>
+
+<p>
+  Update this genre's name or description.
+  Records already connected to this genre will remain associated with it.
+</p>
+
+<% if @genre.errors.any? %>
+  <div>
+    <h2>Please fix the following:</h2>
+
+    <ul>
+      <% @genre.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @genre do |form| %>
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <%= form.submit "Update Genre" %>
+<% end %>
+
+<p>
+  <%= link_to "Back to Genre", genre_path(@genre) %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>

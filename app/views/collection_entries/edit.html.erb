@@ -1,8 +1,17 @@
 <h1>Edit Collection Entry</h1>
 
+<p>
+  Update the personal information you saved for
+  <strong><%= @collection_entry.record.title %></strong>.
+</p>
+
+<p>
+  Changes here only affect your collection entry, not the shared record itself.
+</p>
+
 <% if @collection_entry.errors.any? %>
   <div>
-    <h2>There were some problems:</h2>
+    <h2>Please fix the following:</h2>
 
     <ul>
       <% @collection_entry.errors.full_messages.each do |message| %>
@@ -14,7 +23,7 @@
 
 <%= form_with model: @collection_entry do |form| %>
   <div>
-    <%= form.label :purchase_price %>
+    <%= form.label :purchase_price, "Purchase Price" %>
     <%= form.number_field :purchase_price, step: 0.01 %>
   </div>
 
@@ -25,3 +34,11 @@
 
   <%= form.submit "Update Collection Entry" %>
 <% end %>
+
+<p>
+  <%= link_to "Back to My Collection", collection_entries_path %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>

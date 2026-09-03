@@ -1,0 +1,41 @@
+<h1>Artists</h1>
+
+<p>
+  Browse the artists represented in the Crate Digger database.
+  Select an artist to view more information.
+</p>
+
+<p>
+  <%= link_to "Add New Artist", new_artist_path %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>
+
+<% if @artists.any? %>
+  <% @artists.each do |artist| %>
+    <div>
+      <h2>
+        <%= link_to artist.name, artist_path(artist) %>
+      </h2>
+
+      <p>
+        Country:
+        <%= artist.country %>
+      </p>
+    </div>
+  <% end %>
+<% else %>
+  <p>
+    No artists have been added yet.
+  </p>
+
+  <p>
+    Add an artist before creating records for them.
+  </p>
+
+  <p>
+    <%= link_to "Add the First Artist", new_artist_path %>
+  </p>
+<% end %>

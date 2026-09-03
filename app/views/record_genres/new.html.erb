@@ -1,0 +1,49 @@
+<h1>Add Genre to <%= @record.title %></h1>
+
+<p>
+  Choose a genre to associate with this record.
+  Mark it as the primary genre if it best represents the record's overall style.
+</p>
+
+<p>
+  Use the notes field for any extra information about this genre connection.
+</p>
+
+<% if @record_genre.errors.any? %>
+  <div>
+    <h2>Please fix the following:</h2>
+
+    <ul>
+      <% @record_genre.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: [ @record, @record_genre ] do |form| %>
+  <div>
+    <%= form.label :genre_id, "Genre" %>
+    <%= form.collection_select :genre_id, @genres, :id, :name %>
+  </div>
+
+  <div>
+    <%= form.label :primary_genre, "Primary Genre" %>
+    <%= form.check_box :primary_genre %>
+  </div>
+
+  <div>
+    <%= form.label :notes %>
+    <%= form.text_area :notes %>
+  </div>
+
+  <%= form.submit "Add Genre" %>
+<% end %>
+
+<p>
+  <%= link_to "Back to Record", record_path(@record) %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>

@@ -11,4 +11,6 @@ class Record < ApplicationRecord
   validates :release_year, presence: true
   validates :format, presence: true
   validates :condition, presence: true
+
+  scope :alphabetical, -> { order(:title) }
 end
