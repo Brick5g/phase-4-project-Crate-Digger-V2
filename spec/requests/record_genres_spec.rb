@@ -1,8 +1,25 @@
 require "rails_helper"
 
 RSpec.describe "RecordGenres", type: :request do
+  def log_in_user
+    user = create(
+      :user,
+      password: "password",
+      password_confirmation: "password"
+    )
+
+    post "/login", params: {
+      email: user.email,
+      password: "password"
+    }
+
+    user
+  end
+
   describe "GET /records/:record_id/record_genres/new" do
     it "shows the form for adding a genre to a record" do
+      log_in_user
+
       record = create(:record)
       create(:genre, name: "Hip-Hop")
 
@@ -16,6 +33,8 @@ RSpec.describe "RecordGenres", type: :request do
 
   describe "POST /records/:record_id/record_genres" do
     it "adds a genre to the selected record" do
+      log_in_user
+
       record = create(:record)
       genre = create(:genre)
 
@@ -37,6 +56,8 @@ RSpec.describe "RecordGenres", type: :request do
     end
 
     it "does not add the same genre to a record twice" do
+      log_in_user
+
       record = create(:record)
       genre = create(:genre)
 
@@ -62,6 +83,8 @@ RSpec.describe "RecordGenres", type: :request do
 
   describe "DELETE /record_genres/:id" do
     it "removes a genre from a record" do
+      log_in_user
+
       record_genre = create(:record_genre)
       record = record_genre.record
 

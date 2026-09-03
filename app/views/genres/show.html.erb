@@ -1,16 +1,29 @@
 <h1><%= @genre.name %></h1>
 
+<% if @genre.description.present? %>
+  <p>
+    <%= @genre.description %>
+  </p>
+<% end %>
+
+<h2>Releases in This Genre</h2>
+
 <p>
-  <%= @genre.description %>
+  These releases have been associated with
+  <strong><%= @genre.name %></strong>.
 </p>
 
-<h2>Records in <%= @genre.name %></h2>
-
 <% if @genre.records.any? %>
-  <% @genre.records.each do |record| %>
+  <% @genre.records.alphabetical.each do |record| %>
     <div>
+      <% if record.artwork_url.present? %>
+        <%= image_tag record.artwork_url,
+                      alt: "#{record.title} cover" %>
+      <% end %>
+
       <h3>
-        <%= link_to record.title, record_path(record) %>
+        <%= link_to record.title,
+                    record_path(record) %>
       </h3>
 
       <p>
@@ -19,33 +32,28 @@
       </p>
 
       <p>
-        Release Year:
-        <%= record.release_year %>
+        Release Type:
+        <%= record.release_type %>
       </p>
 
       <p>
-        Format:
-        <%= record.format %>
+        Release Date:
+        <%= record.release_date || "Unknown" %>
       </p>
     </div>
   <% end %>
 <% else %>
   <p>
-    No records are currently associated with this genre.
-  </p>
-
-  <p>
-    Genres can be attached from an individual record's page.
-  </p>
-
-  <p>
-    <%= link_to "Browse Records", records_path %>
+    No releases currently use this genre.
   </p>
 <% end %>
 
-<p>
-  <%= link_to "Edit Genre", edit_genre_path(@genre) %>
-</p>
+<% if current_user %>
+  <p>
+    <%= link_to "Edit Genre",
+                edit_genre_path(@genre) %>
+  </p>
+<% end %>
 
 <p>
   <%= link_to "Back to Genres", genres_path %>
@@ -54,10 +62,3 @@
 <p>
   <%= link_to "Home", root_path %>
 </p>
-
-<%= button_to "Delete Genre",
-              genre_path(@genre),
-              method: :delete,
-              data: {
-                turbo_confirm: "Are you sure you want to delete this genre?"
-              } %>

@@ -51,7 +51,6 @@ class CollectionEntriesController < ApplicationController
 
   def collection_entry_params
     params.require(:collection_entry).permit(
-      :purchase_price,
       :notes
     )
   end

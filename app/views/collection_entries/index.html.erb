@@ -1,17 +1,16 @@
 <h1>My Collection</h1>
 
 <p>
-  This is your personal vinyl collection.
-  Records you add from the Crate Digger database will appear here.
+  These are the releases you have saved to your personal Crate Digger collection.
 </p>
 
 <p>
-  To add another record, browse the record database and select
-  "Add to Collection" from the record's page.
+  Want to save something else?
+  Browse the releases and choose "Save to My Collection."
 </p>
 
 <p>
-  <%= link_to "Browse Records", records_path %>
+  <%= link_to "Browse Releases", records_path %>
 </p>
 
 <p>
@@ -21,6 +20,11 @@
 <% if @collection_entries.any? %>
   <% @collection_entries.each do |entry| %>
     <div>
+      <% if entry.record.artwork_url.present? %>
+        <%= image_tag entry.record.artwork_url,
+                      alt: "#{entry.record.title} cover" %>
+      <% end %>
+
       <h2>
         <%= entry.record.title %>
       </h2>
@@ -30,41 +34,56 @@
         <%= entry.record.artist.name %>
       </p>
 
+      <% review = current_user.reviews.find_by(record: entry.record) %>
+
+      <% if review %>
+        <p>
+          My Rating:
+          <%= review.rating %> / 10
+        </p>
+      <% else %>
+        <p>
+          You have not rated this release yet.
+        </p>
+
+        <p>
+          <%= link_to "Rate This Release",
+                      new_record_review_path(entry.record) %>
+        </p>
+      <% end %>
+
+      <% if entry.notes.present? %>
+        <p>
+          My Note:
+          <%= entry.notes %>
+        </p>
+      <% end %>
+
       <p>
-        Purchase Price:
-        $<%= entry.purchase_price %>
+        <%= link_to "View Release", record_path(entry.record) %>
       </p>
 
       <p>
-        Notes:
-        <%= entry.notes %>
-      </p>
-
-      <p>
-        <%= link_to "View Record", record_path(entry.record) %>
-      </p>
-
-      <p>
-        <%= link_to "Edit Collection Entry",
+        <%= link_to "Edit My Note",
                     edit_collection_entry_path(entry) %>
       </p>
 
-      <%= button_to "Remove from Collection",
+      <%= button_to "Remove from My Collection",
                     collection_entry_path(entry),
                     method: :delete,
                     data: {
-                      turbo_confirm: "Remove this record from your collection?"
+                      turbo_confirm: "Remove this release from your collection?"
                     } %>
     </div>
   <% end %>
 <% else %>
-  <h2>Your crate is empty!</h2>
+  <h2>Your collection is empty.</h2>
 
   <p>
-    Browse the record database and add something to start your collection.
+    That's okay! Start by browsing releases and saving something you like.
   </p>
 
   <p>
-    <%= link_to "Find Some Records", records_path %>
+    <%= link_to "Browse Releases", records_path %>
   </p>
 <% end %>

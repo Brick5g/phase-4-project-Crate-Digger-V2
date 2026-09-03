@@ -1,4 +1,7 @@
 class GenresController < ApplicationController
+  before_action :require_login,
+                only: [ :new, :create, :edit, :update, :destroy ]
+
   def index
     @genres = Genre.order(:name)
   end

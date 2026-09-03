@@ -1,16 +1,16 @@
 <h1>Crate Digger V2</h1>
 
 <p>
-  Welcome to Crate Digger V2, a vinyl collection tracker where you can
-  browse records, artists, and genres while building your own collection.
+  Welcome to Crate Digger V2, a vinyl collection tracker and review platform
+  where you can browse records, artists, genres, and community reviews.
 </p>
 
 <% if current_user %>
   <h2>Welcome, <%= current_user.username %>!</h2>
 
   <p>
-    Ready to keep digging? View your personal collection or explore the
-    record database below.
+    Ready to keep digging? Browse releases, write reviews,
+    or manage your personal collection.
   </p>
 
   <p>
@@ -21,11 +21,12 @@
     <%= button_to "Log Out", logout_path, method: :delete %>
   </p>
 <% else %>
-  <h2>Start Your Collection</h2>
+  <h2>Start Digging</h2>
 
   <p>
-    Create an account to save records to your personal collection.
-    Already have an account? Log in to continue where you left off.
+    Anyone can browse Crate Digger and read reviews.
+    Create an account to add releases, write reviews,
+    and build your personal collection.
   </p>
 
   <p>
@@ -55,20 +56,23 @@
   <%= link_to "Browse Genres", genres_path %>
 </p>
 
-<h2>Contribute</h2>
+<% if current_user %>
+  <h2>Contribute</h2>
 
-<p>
-  Don't see what you're looking for? Add new music information to the database.
-</p>
+  <p>
+    Don't see what you're looking for?
+    Add new music information to the database.
+  </p>
 
-<p>
-  <%= link_to "Add New Record", new_record_path %>
-</p>
+  <p>
+    <%= link_to "Add New Record", new_record_path %>
+  </p>
 
-<p>
-  <%= link_to "Add New Artist", new_artist_path %>
-</p>
+  <p>
+    <%= link_to "Add New Artist", new_artist_path %>
+  </p>
 
-<p>
-  <%= link_to "Add New Genre", new_genre_path %>
-</p>
+  <p>
+    <%= link_to "Add New Genre", new_genre_path %>
+  </p>
+<% end %>

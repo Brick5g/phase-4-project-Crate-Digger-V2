@@ -1,0 +1,49 @@
+<h1>Review <%= @record.title %></h1>
+
+<p>
+  What did you think of this release?
+</p>
+
+<p>
+  Choose a score from 1 to 10.
+  A score of 1 means you did not enjoy it.
+  A score of 10 means you loved it.
+</p>
+
+<p>
+  Writing additional thoughts is optional.
+</p>
+
+<% if @review.errors.any? %>
+  <div>
+    <h2>Please fix the following:</h2>
+
+    <ul>
+      <% @review.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: [ @record, @review ] do |form| %>
+  <div>
+    <%= form.label :rating, "Your Rating (1-10)" %>
+    <%= form.number_field :rating, min: 1, max: 10 %>
+  </div>
+
+  <div>
+    <%= form.label :body, "Your Thoughts (Optional)" %>
+    <%= form.text_area :body %>
+  </div>
+
+  <%= form.submit "Save My Review" %>
+<% end %>
+
+<p>
+  <%= link_to "Back to Release", record_path(@record) %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>

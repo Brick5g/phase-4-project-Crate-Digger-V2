@@ -1,0 +1,45 @@
+<h1>Edit My Review</h1>
+
+<p>
+  Update your rating or thoughts about
+  <strong><%= @review.record.title %></strong>.
+</p>
+
+<p>
+  Your score must be between 1 and 10.
+  Written thoughts are optional.
+</p>
+
+<% if @review.errors.any? %>
+  <div>
+    <h2>Please fix the following:</h2>
+
+    <ul>
+      <% @review.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @review do |form| %>
+  <div>
+    <%= form.label :rating, "Your Rating (1-10)" %>
+    <%= form.number_field :rating, min: 1, max: 10 %>
+  </div>
+
+  <div>
+    <%= form.label :body, "Your Thoughts (Optional)" %>
+    <%= form.text_area :body %>
+  </div>
+
+  <%= form.submit "Update My Review" %>
+<% end %>
+
+<p>
+  <%= link_to "Back to Release", record_path(@review.record) %>
+</p>
+
+<p>
+  <%= link_to "Home", root_path %>
+</p>

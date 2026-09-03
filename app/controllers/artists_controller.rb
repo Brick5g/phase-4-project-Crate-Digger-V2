@@ -1,4 +1,7 @@
 class ArtistsController < ApplicationController
+  before_action :require_login,
+                only: [ :new, :create, :edit, :update, :destroy ]
+
   def index
     @artists = Artist.order(:name)
   end
@@ -47,7 +50,10 @@ class ArtistsController < ApplicationController
   def artist_params
     params.require(:artist).permit(
       :name,
-      :country
+      :country,
+      :hometown,
+      :details,
+      :musicbrainz_id
     )
   end
 end

@@ -1,8 +1,12 @@
-<h1>Add <%= @record.title %> to My Collection</h1>
+<h1>Save <%= @record.title %> to My Collection</h1>
 
 <p>
-  Save this record to your personal collection.
-  You can include what you paid for it and any notes you want to remember.
+  Saving a release puts it in your personal Crate Digger collection
+  so you can easily find it again later.
+</p>
+
+<p>
+  You can also leave a private note for yourself.
 </p>
 
 <% if @collection_entry.errors.any? %>
@@ -19,20 +23,15 @@
 
 <%= form_with model: [ @record, @collection_entry ] do |form| %>
   <div>
-    <%= form.label :purchase_price, "Purchase Price" %>
-    <%= form.number_field :purchase_price, step: 0.01 %>
-  </div>
-
-  <div>
-    <%= form.label :notes %>
+    <%= form.label :notes, "Personal Note" %>
     <%= form.text_area :notes %>
   </div>
 
-  <%= form.submit "Add to My Collection" %>
+  <%= form.submit "Save to My Collection" %>
 <% end %>
 
 <p>
-  <%= link_to "Back to Record", record_path(@record) %>
+  <%= link_to "Back to Release", record_path(@record) %>
 </p>
 
 <p>

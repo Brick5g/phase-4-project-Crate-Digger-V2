@@ -1,10 +1,15 @@
 FactoryBot.define do
   factory :record do
-    title { "Test Album" }
-    release_year { 2020 }
-    format { "Vinyl" }
-    condition { "Near Mint" }
-
     association :artist
+
+    sequence(:title) { |number| "Record #{number}" }
+
+    release_date { Date.new(1993, 11, 9) }
+    release_type { "Album" }
+
+    artwork_url { nil }
+    musicbrainz_id { nil }
+
+    description { "A music release." }
   end
 end

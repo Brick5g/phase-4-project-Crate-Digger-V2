@@ -1,12 +1,12 @@
-<h1>Edit Collection Entry</h1>
+<h1>Edit My Saved Release</h1>
 
 <p>
-  Update the personal information you saved for
+  You are editing your private note for
   <strong><%= @collection_entry.record.title %></strong>.
 </p>
 
 <p>
-  Changes here only affect your collection entry, not the shared record itself.
+  This does not change the release itself or anyone else's information.
 </p>
 
 <% if @collection_entry.errors.any? %>
@@ -23,16 +23,11 @@
 
 <%= form_with model: @collection_entry do |form| %>
   <div>
-    <%= form.label :purchase_price, "Purchase Price" %>
-    <%= form.number_field :purchase_price, step: 0.01 %>
-  </div>
-
-  <div>
-    <%= form.label :notes %>
+    <%= form.label :notes, "Personal Note" %>
     <%= form.text_area :notes %>
   </div>
 
-  <%= form.submit "Update Collection Entry" %>
+  <%= form.submit "Save My Note" %>
 <% end %>
 
 <p>
