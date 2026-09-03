@@ -1,97 +1,73 @@
 # Crate Digger V2
 
-Crate Digger V2 is a Ruby on Rails application for vinyl record collectors who want to organize their personal collections, discover records, and keep track of which artists, genres, and albums they own.
+Crate Digger V2 is a Ruby on Rails music discovery and collection application. Users can search for artists and releases using MusicBrainz, save releases to a personal collection, organize music by genre, and rate and review releases.
 
-This version of Crate Digger expands on the original concept by using a relational Rails database, user authentication, nested resources, ActiveRecord associations, validations, scopes, and automated testing with RSpec and FactoryBot.
+Users can browse Crate Digger without an account, while creating, saving, reviewing, and managing music requires an account.
 
-The goal of the application is to create a clean content management system for record collections while demonstrating a complete Rails MVC architecture.
+## Setup Instructions
 
-## Features
+Clone the repository:
 
-- User signup, login, and logout
-- Secure password authentication
-- Create and manage a personal vinyl record collection
-- Browse individual records and their details
-- Associate records with artists and genres
-- View all records belonging to a specific artist
-- View all records belonging to a specific genre
-- Add records directly to a user's collection through nested routes
-- Prevent invalid or incomplete records from being saved
-- Display validation errors directly in forms
-- Filter records using ActiveRecord scopes
-- Automated model and integration testing with RSpec
-- FactoryBot-generated test data
+```bash
+git clone git@github.com:Brick5g/phase-4-project-Crate-Digger-V2.git
+```
 
-## Domain Overview
+Move into the project directory:
 
-The core models for Crate Digger V2 are:
+```bash
+cd phase-4-project-Crate-Digger-V2
+```
 
-### User
+Install the required gems:
 
-A User represents a collector using the application.
+```bash
+bundle install
+```
 
-A user can own many records through collection entries.
+Create the development and test databases:
 
-Planned attributes:
+```bash
+bin/rails db:create
+```
 
-- username
-- email
-- password_digest
+Run the database migrations:
 
-### Record
+```bash
+bin/rails db:migrate
+```
 
-A Record represents a vinyl release in the application.
+Seed the database with the starter genres:
 
-Planned attributes:
+```bash
+bin/rails db:seed
+```
 
-- title
-- release_year
-- format
-- condition
+Run the test suite:
 
-A record belongs to an artist and can belong to multiple genres.
+```bash
+bundle exec rspec
+```
 
-### Artist
+Run RuboCop:
 
-An Artist represents the musician or group responsible for a record.
+```bash
+bin/rubocop
+```
 
-Planned attributes:
+Start the Rails server:
 
-- name
-- country
+```bash
+bin/rails server
+```
 
-An artist can have many records.
+Open the application in your browser at:
 
-### Genre
+```text
+http://localhost:3000
+```
 
-A Genre represents a musical classification.
+To stop the Rails server, press:
 
-Planned attributes:
-
-- name
-- description
-
-A genre can be associated with many records.
-
-### CollectionEntry
-
-CollectionEntry acts as a join model between User and Record.
-
-Planned attributes:
-
-- purchase_price
-- notes
-
-This model allows users and records to participate in a many-to-many relationship.
-
-### RecordGenre
-
-RecordGenre acts as a join model between Record and Genre.
-
-Planned attributes:
-
-- primary_genre
-- notes
-
-This model allows records and genres to participate in a many-to-many relationship.
-
+```text
+Control + C
+```
