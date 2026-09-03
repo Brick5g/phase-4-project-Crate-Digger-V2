@@ -4,6 +4,8 @@ Crate Digger V2 is a Ruby on Rails music discovery and collection application. U
 
 Users can browse Crate Digger without an account, while creating, saving, reviewing, and managing music requires an account.
 
+![Crate Digger V2 Home Page](app/assets/images/App.png)
+
 ## Setup Instructions
 
 Clone the repository:

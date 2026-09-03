@@ -1,10 +1,368 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 35px;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f4efe6;
+  color: #1f1f1f;
+}
+
+h1 {
+  font-size: 42px;
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+h2 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+h3 {
+  margin-top: 20px;
+}
+
+p {
+  line-height: 1.6;
+  max-width: 850px;
+}
+
+/* GENERAL LINKS */
+
+a {
+  color: #1f1f1f;
+  font-weight: bold;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: #8c3b2f;
+}
+
 /*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
+ * Most navigation links in the application
+ * are inside their own paragraph.
  */
+
+p > a {
+  display: inline-block;
+  padding: 10px 16px;
+  border: 2px solid #1f1f1f;
+  background-color: transparent;
+  color: #1f1f1f;
+  text-decoration: none;
+  margin: 3px 0;
+}
+
+p > a:hover {
+  background-color: #1f1f1f;
+  color: white;
+}
+
+/* BUTTONS */
+
+button,
+input[type="submit"] {
+  padding: 11px 18px;
+  border: 2px solid #1f1f1f;
+  background-color: #1f1f1f;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background-color: #8c3b2f;
+  border-color: #8c3b2f;
+}
+
+/* FORMS */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+  padding: 10px;
+  border: 2px solid #1f1f1f;
+  background-color: white;
+  font-size: 16px;
+  margin: 5px 0 15px 0;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  width: 100%;
+  max-width: 500px;
+}
+
+textarea {
+  min-height: 120px;
+}
+
+select {
+  min-width: 220px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: 8px;
+  transform: scale(1.15);
+}
+
+/* GENERAL RELEASE ARTWORK */
+
+body > img {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  object-fit: cover;
+}
+
+/* HOME PAGE */
+
+.home-page {
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+
+  /*
+   * Removes the normal body padding from the homepage.
+   */
+  margin: -35px;
+}
+
+.home-content {
+  width: 45%;
+  min-height: 100vh;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.home-content h1 {
+  font-size: 56px;
+  margin: 20px 0 10px 0;
+}
+
+.home-content h2 {
+  margin-top: 30px;
+}
+
+.home-content p {
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.home-tagline {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+/* VINYL LOGO */
+
+.home-logo {
+  width: 110px;
+  height: 110px;
+}
+
+.vinyl-record {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background-color: #171717;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vinyl-label {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #f4efe6;
+  border: 10px solid #8c3b2f;
+}
+
+/* HOME BUTTONS */
+
+.home-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.home-button {
+  display: inline-block;
+  padding: 12px 20px;
+  border: 2px solid #1f1f1f;
+  background-color: #1f1f1f;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.home-button:hover {
+  background-color: #f4efe6;
+  color: #1f1f1f;
+}
+
+.secondary-button {
+  background-color: transparent;
+  color: #1f1f1f;
+}
+
+.home-logout {
+  margin-top: 12px;
+}
+
+.home-logout form {
+  margin: 0;
+}
+
+.home-browse {
+  margin-top: 35px;
+}
+
+.home-browse a {
+  display: block;
+  width: fit-content;
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8c3b2f;
+  text-decoration: none;
+}
+
+.home-browse a:hover {
+  background-color: #1f1f1f;
+  color: white;
+}
+
+.home-manual {
+  margin-top: 25px;
+}
+
+/* ALBUM WALL */
+
+.album-wall {
+  width: 55%;
+  height: 100vh;
+  display: flex;
+  gap: 18px;
+  padding: 0 18px;
+  overflow: hidden;
+  background-color: #1b1b1b;
+}
+
+.album-column {
+  width: 50%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.album-track {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 18px;
+  animation: scroll-albums 45s linear infinite;
+}
+
+.reverse-track {
+  animation: scroll-albums-reverse 55s linear infinite;
+}
+
+.album-cover {
+  flex-shrink: 0;
+}
+
+.album-cover img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.album-column-two {
+  transform: translateY(-120px);
+}
+
+@keyframes scroll-albums {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes scroll-albums-reverse {
+  from {
+    transform: translateY(-50%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.album-wall-empty {
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+  body {
+    padding: 20px;
+  }
+
+  .home-page {
+    display: block;
+    overflow: visible;
+    margin: -20px;
+  }
+
+  .home-content {
+    width: 100%;
+    min-height: auto;
+    padding: 40px 25px;
+  }
+
+  .home-content h1 {
+    font-size: 42px;
+  }
+
+  .album-wall {
+    width: 100%;
+    height: 500px;
+  }
+
+  .album-column {
+    height: 500px;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+}
