@@ -12,138 +12,161 @@
   <strong>Midnight Marauders A Tribe Called Quest</strong>.
 </p>
 
-<%= form_with url: music_search_path, method: :get do |form| %>
-  <div>
+<div class="music-search-form">
+  <%= form_with url: music_search_path, method: :get do |form| %>
     <%= form.label :query, "What music are you looking for?" %>
 
-    <%= form.text_field(
-          :query,
-          value: @query,
-          placeholder: "Artist or release name"
-        ) %>
-  </div>
+    <div class="music-search-row">
+      <%= form.text_field(
+            :query,
+            value: @query,
+            placeholder: "Artist or release name"
+          ) %>
 
-  <%= form.submit "Search Music" %>
-<% end %>
+      <%= form.submit "Search Music" %>
+    </div>
+  <% end %>
+</div>
 
 <% if @error %>
-  <h2>Search Problem</h2>
+  <div class="search-message">
+    <h2>Search Problem</h2>
 
-  <p><%= @error %></p>
+    <p>
+      <%= @error %>
+    </p>
+  </div>
 <% end %>
 
 <% if @artist_results.any? %>
-  <h2>Artist Matches</h2>
+  <section class="search-section">
+    <h2>Artist Matches</h2>
 
-  <p>
-    Looking for an artist's full discography?
-    Choose the artist below.
-  </p>
+    <p>
+      Looking for an artist's full discography?
+      Choose the artist below.
+    </p>
 
-  <% @artist_results.each do |artist| %>
-    <div>
-      <h3><%= artist["name"] %></h3>
+    <div class="artist-results-grid">
+      <% @artist_results.each do |artist| %>
+        <div class="artist-result-card">
+          <h3>
+            <%= artist["name"] %>
+          </h3>
 
-      <% if artist["disambiguation"].present? %>
-        <p><%= artist["disambiguation"] %></p>
+          <% if artist["disambiguation"].present? %>
+            <p>
+              <%= artist["disambiguation"] %>
+            </p>
+          <% end %>
+
+          <% if artist["country"].present? %>
+            <p>
+              Country:
+              <strong><%= artist["country"] %></strong>
+            </p>
+          <% end %>
+
+          <p>
+            MusicBrainz Match Score:
+            <strong><%= artist["score"] %></strong>
+          </p>
+
+          <%= link_to(
+                "View All Releases",
+                music_search_artist_path(
+                  artist["id"]
+                ),
+                class: "search-link"
+              ) %>
+        </div>
       <% end %>
-
-      <% if artist["country"].present? %>
-        <p>
-          Country:
-          <%= artist["country"] %>
-        </p>
-      <% end %>
-
-      <p>
-        MusicBrainz Match Score:
-        <%= artist["score"] %>
-      </p>
-
-      <p>
-        <%= link_to(
-              "View All Releases",
-              music_search_artist_path(
-                artist["id"]
-              )
-            ) %>
-      </p>
     </div>
-  <% end %>
+  </section>
 <% end %>
 
 <% if @release_results.any? %>
-  <h2>Release Matches</h2>
+  <section class="search-section">
+    <h2>Release Matches</h2>
 
-  <p>
-    If you already see the release you want,
-    you can save it immediately.
-  </p>
+    <p>
+      If you already see the release you want,
+      you can save it immediately.
+    </p>
 
-  <% @release_results.each do |release| %>
-    <% artist_names =
-         release.fetch(
-           "artist-credit",
-           []
-         ).map do |credit|
-           credit["name"]
-         end.compact.join(", ") %>
+    <div class="release-results-grid">
+      <% @release_results.each do |release| %>
+        <% artist_names =
+             release.fetch(
+               "artist-credit",
+               []
+             ).map do |credit|
+               credit["name"]
+             end.compact.join(", ") %>
 
-    <div>
-      <%= image_tag(
-            "https://coverartarchive.org/release-group/#{release["id"]}/front-250",
-            alt: "#{release["title"]} cover",
-            width: 150,
-            onerror: "this.style.display='none'"
-          ) %>
+        <div class="release-result-card">
+          <%= image_tag(
+                "https://coverartarchive.org/release-group/#{release["id"]}/front-250",
+                alt: "#{release["title"]} cover",
+                class: "search-cover",
+                onerror: "this.style.display='none'"
+              ) %>
 
-      <h3><%= release["title"] %></h3>
+          <h3>
+            <%= release["title"] %>
+          </h3>
 
-      <p>
-        Artist:
-        <%= artist_names.presence || "Unknown Artist" %>
-      </p>
+          <p class="search-artist-name">
+            <%= artist_names.presence || "Unknown Artist" %>
+          </p>
 
-      <p>
-        Release Type:
-        <%= release["primary-type"].presence || "Unknown" %>
-      </p>
+          <p>
+            Release Type:
+            <strong>
+              <%= release["primary-type"].presence || "Unknown" %>
+            </strong>
+          </p>
 
-      <p>
-        First Released:
-        <%= release["first-release-date"].presence || "Unknown" %>
-      </p>
+          <p>
+            First Released:
+            <strong>
+              <%= release["first-release-date"].presence || "Unknown" %>
+            </strong>
+          </p>
 
-      <p>
-        <%= button_to(
-              "Add to My Collection",
-              import_music_release_path(
-                release["id"]
-              ),
-              method: :post
-            ) %>
-      </p>
+          <%= button_to(
+                "Add to My Collection",
+                import_music_release_path(
+                  release["id"]
+                ),
+                method: :post
+              ) %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+  </section>
 <% end %>
 
 <% if @query.present? &&
       @artist_results.empty? &&
       @release_results.empty? &&
       !@error %>
+  <div class="search-message">
+    <h2>No Results Found</h2>
 
-  <h2>No Results Found</h2>
-
-  <p>
-    We could not find anything matching
-    <strong><%= @query %></strong>.
-  </p>
+    <p>
+      We could not find anything matching
+      <strong><%= @query %></strong>.
+    </p>
+  </div>
 <% end %>
 
-<p>
-  <%= link_to "Enter a Release Manually", new_record_path %>
-</p>
+<div class="page-actions">
+  <%= link_to "Enter a Release Manually",
+              new_record_path,
+              class: "search-link" %>
 
-<p>
-  <%= link_to "Home", root_path %>
-</p>
+  <%= link_to "Home",
+              root_path,
+              class: "search-link" %>
+</div>

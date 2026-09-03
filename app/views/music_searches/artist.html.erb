@@ -1,9 +1,11 @@
-<h1><%= @artist_name || "Artist Releases" %></h1>
+<h1>
+  <%= @artist_name || "Artist Releases" %>
+</h1>
 
 <% if @artist_country.present? %>
   <p>
     Country:
-    <%= @artist_country %>
+    <strong><%= @artist_country %></strong>
   </p>
 <% end %>
 
@@ -17,8 +19,13 @@
 </p>
 
 <% if @error %>
-  <h2>Loading Problem</h2>
-  <p><%= @error %></p>
+  <div class="search-message">
+    <h2>Loading Problem</h2>
+
+    <p>
+      <%= @error %>
+    </p>
+  </div>
 <% end %>
 
 <% if @release_results.any? %>
@@ -26,48 +33,60 @@
     Releases (<%= @release_results.length %>)
   </h2>
 
-  <% @release_results.each do |release| %>
-    <div>
-      <%= image_tag(
-            "https://coverartarchive.org/release-group/#{release["id"]}/front-250",
-            alt: "#{release["title"]} cover",
-            width: 150,
-            onerror: "this.style.display='none'"
-          ) %>
+  <div class="release-results-grid">
+    <% @release_results.each do |release| %>
+      <div class="release-result-card">
+        <%= image_tag(
+              "https://coverartarchive.org/release-group/#{release["id"]}/front-250",
+              alt: "#{release["title"]} cover",
+              class: "search-cover",
+              onerror: "this.style.display='none'"
+            ) %>
 
-      <h3>
-        <%= release["title"] %>
-      </h3>
+        <h3>
+          <%= release["title"] %>
+        </h3>
 
-      <p>
-        Type:
-        <%= release["primary-type"].presence || "Unknown" %>
-      </p>
+        <p>
+          Type:
+          <strong>
+            <%= release["primary-type"].presence || "Unknown" %>
+          </strong>
+        </p>
 
-      <p>
-        First Released:
-        <%= release["first-release-date"].presence || "Unknown" %>
-      </p>
+        <p>
+          First Released:
+          <strong>
+            <%= release["first-release-date"].presence || "Unknown" %>
+          </strong>
+        </p>
 
-      <%= button_to(
-            "Add to My Collection",
-            import_music_release_path(
-              release["id"]
-            ),
-            method: :post
-          ) %>
-    </div>
-  <% end %>
+        <%= button_to(
+              "Add to My Collection",
+              import_music_release_path(
+                release["id"]
+              ),
+              method: :post
+            ) %>
+      </div>
+    <% end %>
+  </div>
 <% elsif !@error %>
-  <p>
-    No releases were found for this artist.
-  </p>
+  <div class="search-message">
+    <h2>No Releases Found</h2>
+
+    <p>
+      No releases were found for this artist.
+    </p>
+  </div>
 <% end %>
 
-<p>
-  <%= link_to "Back to Music Search", music_search_path %>
-</p>
+<div class="page-actions">
+  <%= link_to "Back to Music Search",
+              music_search_path,
+              class: "search-link" %>
 
-<p>
-  <%= link_to "Home", root_path %>
-</p>
+  <%= link_to "Home",
+              root_path,
+              class: "search-link" %>
+</div>
