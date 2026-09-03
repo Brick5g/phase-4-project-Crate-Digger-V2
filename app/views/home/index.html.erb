@@ -1,82 +1,132 @@
-<h1>Crate Digger V2</h1>
+<div class="home-page">
+  <section class="home-content">
+    <div class="home-logo">
+      <div class="vinyl-record">
+        <div class="vinyl-label"></div>
+      </div>
+    </div>
 
-<p>
-  Welcome to Crate Digger V2.
-</p>
+    <h1>Crate Digger</h1>
 
-<p>
-  Discover music, save releases you like,
-  and share your own ratings and reviews.
-</p>
+    <p class="home-tagline">
+      Discover music, build your collection,
+      and remember what you loved.
+    </p>
 
-<% if current_user %>
-  <h2>Welcome, <%= current_user.username %>!</h2>
+    <% if current_user %>
+      <h2>Welcome, <%= current_user.username %>!</h2>
 
-  <p>
-    Not sure where to begin?
-  </p>
+      <p>
+        Start by searching for a release you know.
+        Crate Digger will help you find the correct music information.
+      </p>
 
-  <p>
-    Start by searching for a release you know.
-    Crate Digger will help you find the correct music information.
-  </p>
+      <div class="home-actions">
+        <%= link_to "Search for Music",
+                    music_search_path,
+                    class: "home-button" %>
 
-  <p>
-    <%= link_to "Search for Music", music_search_path %>
-  </p>
+        <%= link_to "View My Collection",
+                    collection_entries_path,
+                    class: "home-button" %>
+      </div>
 
-  <p>
-    <%= link_to "View My Collection", collection_entries_path %>
-  </p>
+      <div class="home-logout">
+        <%= button_to "Log Out",
+                      logout_path,
+                      method: :delete,
+                      class: "home-button secondary-button" %>
+      </div>
+    <% else %>
+      <h2>New Here?</h2>
 
-  <p>
-    <%= button_to "Log Out", logout_path, method: :delete %>
-  </p>
-<% else %>
-  <h2>New Here?</h2>
+      <p>
+        You can browse Crate Digger without an account.
+      </p>
 
-  <p>
-    You can look through Crate Digger without an account.
-  </p>
+      <p>
+        Create an account to save music,
+        add releases, and write reviews.
+      </p>
 
-  <p>
-    To save music, add releases, or write reviews,
-    you will need to create a free account first.
-  </p>
+      <div class="home-actions">
+        <%= link_to "Create an Account",
+                    signup_path,
+                    class: "home-button" %>
 
-  <p>
-    <%= link_to "Create an Account", signup_path %>
-  </p>
+        <%= link_to "Log In",
+                    login_path,
+                    class: "home-button secondary-button" %>
+      </div>
+    <% end %>
 
-  <p>
-    Already have an account?
-    <%= link_to "Log In", login_path %>
-  </p>
-<% end %>
+    <div class="home-browse">
+      <h2>Browse Crate Digger</h2>
 
-<h2>Browse Crate Digger</h2>
+      <%= link_to "Browse Releases", records_path %>
+      <%= link_to "Browse Artists", artists_path %>
+      <%= link_to "Browse Genres", genres_path %>
+    </div>
 
-<p>
-  <%= link_to "Browse Releases", records_path %>
-</p>
+    <% if current_user %>
+      <div class="home-manual">
+        <h2>Can't Find Something?</h2>
 
-<p>
-  <%= link_to "Browse Artists", artists_path %>
-</p>
+        <p>
+          If music search does not find the release you need,
+          you can enter it manually.
+        </p>
 
-<p>
-  <%= link_to "Browse Genres", genres_path %>
-</p>
+        <%= link_to "Enter a Release Manually",
+                    new_record_path %>
+      </div>
+    <% end %>
+  </section>
 
-<% if current_user %>
-  <h2>Other Ways to Add Music</h2>
+  <section class="album-wall">
+    <% if @wall_records.any? %>
+      <div class="album-column album-column-one">
+        <div class="album-track">
+          <% @wall_records.each do |record| %>
+            <div class="album-cover">
+              <%= image_tag record.artwork_url,
+                            alt: "#{record.title} album cover" %>
+            </div>
+          <% end %>
 
-  <p>
-    If music search does not find what you need,
-    you can enter a release manually.
-  </p>
+          <% @wall_records.each do |record| %>
+            <div class="album-cover">
+              <%= image_tag record.artwork_url,
+                            alt: "#{record.title} album cover" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
 
-  <p>
-    <%= link_to "Enter a Release Manually", new_record_path %>
-  </p>
-<% end %>
+      <div class="album-column album-column-two">
+        <div class="album-track reverse-track">
+          <% @wall_records.reverse.each do |record| %>
+            <div class="album-cover">
+              <%= image_tag record.artwork_url,
+                            alt: "#{record.title} album cover" %>
+            </div>
+          <% end %>
+
+          <% @wall_records.reverse.each do |record| %>
+            <div class="album-cover">
+              <%= image_tag record.artwork_url,
+                            alt: "#{record.title} album cover" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="album-wall-empty">
+        <p>
+          Album artwork will appear here
+          as releases are added to Crate Digger.
+        </p>
+      </div>
+    <% end %>
+  </section>
+</div>
