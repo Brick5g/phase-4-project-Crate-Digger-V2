@@ -619,3 +619,73 @@ body > img {
     margin-top: 10px;
   }
 }
+
+.review-form-section {
+  margin: 30px 0;
+  max-width: 850px;
+}
+
+.review-form-section > label {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.rating-labels {
+  display: flex;
+  justify-content: space-between;
+  max-width: 650px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.rating-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.rating-choice input[type="radio"] {
+  display: none;
+}
+
+.rating-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 52px;
+  height: 52px;
+  border: 2px solid #1f1f1f;
+  background-color: transparent;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.rating-button:hover {
+  background-color: #ebe4d8;
+}
+
+.rating-choice input[type="radio"]:checked + .rating-button {
+  background-color: #1f1f1f;
+  color: white;
+}
+
+.review-form-section textarea {
+  width: 100%;
+  max-width: 850px;
+  min-height: 180px;
+}
+
+.review-errors {
+  max-width: 850px;
+  margin: 25px 0;
+  padding: 20px;
+  border-left: 5px solid #8c3b2f;
+  background-color: #ebe4d8;
+}
+
+.review-errors h2 {
+  margin-top: 0;
+}

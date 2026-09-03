@@ -11,7 +11,7 @@
 </p>
 
 <% if @review.errors.any? %>
-  <div>
+  <div class="review-errors">
     <h2>Please fix the following:</h2>
 
     <ul>
@@ -23,14 +23,32 @@
 <% end %>
 
 <%= form_with model: @review do |form| %>
-  <div>
-    <%= form.label :rating, "Your Rating (1-10)" %>
-    <%= form.number_field :rating, min: 1, max: 10 %>
+  <div class="review-form-section">
+    <h2>Your Rating</h2>
+
+    <div class="rating-labels">
+      <span>Did not enjoy it</span>
+      <span>Loved it</span>
+    </div>
+
+    <div class="rating-options">
+      <% (1..10).each do |number| %>
+        <div class="rating-choice">
+          <%= form.radio_button :rating, number %>
+          <%= form.label :rating,
+                         number,
+                         value: number,
+                         class: "rating-button" %>
+        </div>
+      <% end %>
+    </div>
   </div>
 
-  <div>
+  <div class="review-form-section">
     <%= form.label :body, "Your Thoughts (Optional)" %>
-    <%= form.text_area :body %>
+
+    <%= form.text_area :body,
+                       placeholder: "What stood out to you about this release?" %>
   </div>
 
   <%= form.submit "Update My Review" %>
