@@ -71,3 +71,5 @@ group :development, :test do
 end
 
 gem "bcrypt"
+
+gem "view_component"

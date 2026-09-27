@@ -35,43 +35,13 @@
 
   <div class="release-results-grid">
     <% @release_results.each do |release| %>
-      <div class="release-result-card">
-        <%= image_tag(
-              "https://coverartarchive.org/release-group/#{release["id"]}/front-250",
-              alt: "#{release["title"]} cover",
-              class: "search-cover",
-              onerror: "this.style.display='none'"
-            ) %>
-
-        <h3>
-          <%= release["title"] %>
-        </h3>
-
-        <p>
-          Type:
-          <strong>
-            <%= release["primary-type"].presence || "Unknown" %>
-          </strong>
-        </p>
-
-        <p>
-          First Released:
-          <strong>
-            <%= release["first-release-date"].presence || "Unknown" %>
-          </strong>
-        </p>
-
-        <%= button_to(
-              "Add to My Collection",
-              import_music_release_path(
-                release["id"]
-              ),
-              method: :post
-            ) %>
-      </div>
+      <%= render MusicSearch::ReleaseResultComponent.new(
+        release: release
+      ) %>
     <% end %>
   </div>
-<% elsif !@error %>
+
+  <% elsif !@error %>
   <div class="search-message">
     <h2>No Releases Found</h2>
 

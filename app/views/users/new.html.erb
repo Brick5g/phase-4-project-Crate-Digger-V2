@@ -5,17 +5,9 @@
   You'll use this account to save records, purchase prices, and notes.
 </p>
 
-<% if @user.errors.any? %>
-  <div>
-    <h2>Please fix the following:</h2>
-
-    <ul>
-      <% @user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<%= render ValidationErrorsComponent.new(
+      resource: @user
+    ) %>
 
 <%= form_with model: @user, url: signup_path do |form| %>
   <div>

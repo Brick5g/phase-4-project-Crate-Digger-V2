@@ -1,0 +1,28 @@
+<div class="record-card">
+  <% if @record.artwork_url.present? %>
+    <%= image_tag @record.artwork_url,
+                  alt: "#{@record.title} cover",
+                  width: 150,
+                  onerror: "this.style.display='none'" %>
+  <% end %>
+
+  <h3>
+    <%= link_to @record.title,
+                record_path(@record) %>
+  </h3>
+
+  <p>
+    Artist:
+    <%= @record.artist.name %>
+  </p>
+
+  <p>
+    Release Type:
+    <%= @record.release_type %>
+  </p>
+
+  <p>
+    Release Date:
+    <%= release_date %>
+  </p>
+</div>

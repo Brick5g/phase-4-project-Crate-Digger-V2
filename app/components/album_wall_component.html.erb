@@ -1,0 +1,46 @@
+<section class="album-wall">
+  <% if records? %>
+    <div class="album-column album-column-one">
+      <div class="album-track">
+        <% @records.each do |record| %>
+          <div class="album-cover">
+            <%= image_tag record.artwork_url,
+                          alt: "#{record.title} album cover" %>
+          </div>
+        <% end %>
+
+        <% @records.each do |record| %>
+          <div class="album-cover">
+            <%= image_tag record.artwork_url,
+                          alt: "#{record.title} album cover" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="album-column album-column-two">
+      <div class="album-track reverse-track">
+        <% reversed_records.each do |record| %>
+          <div class="album-cover">
+            <%= image_tag record.artwork_url,
+                          alt: "#{record.title} album cover" %>
+          </div>
+        <% end %>
+
+        <% reversed_records.each do |record| %>
+          <div class="album-cover">
+            <%= image_tag record.artwork_url,
+                          alt: "#{record.title} album cover" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="album-wall-empty">
+      <p>
+        Album artwork will appear here
+        as releases are added to Crate Digger.
+      </p>
+    </div>
+  <% end %>
+</section>

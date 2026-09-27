@@ -9,17 +9,9 @@
   They do not change anyone's personal review.
 </p>
 
-<% if @record.errors.any? %>
-  <div>
-    <h2>We could not update this release:</h2>
-
-    <% @record.errors.full_messages.each do |message| %>
-      <p>
-        <%= message %>
-      </p>
-    <% end %>
-  </div>
-<% end %>
+<%= render ValidationErrorsComponent.new(
+      resource: @record
+    ) %>
 
 <% if @genre_error.present? %>
   <div>

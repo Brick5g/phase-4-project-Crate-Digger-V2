@@ -5,18 +5,10 @@
   Once the artist exists, records can be connected to them.
 </p>
 
-<% if @artist.errors.any? %>
-  <div>
-    <h2>Please fix the following:</h2>
-
-    <ul>
-      <% @artist.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-
+<%= render ValidationErrorsComponent.new(
+      resource: @artist
+    ) %>
+    
 <%= form_with model: @artist do |form| %>
   <div>
     <%= form.label :name %>

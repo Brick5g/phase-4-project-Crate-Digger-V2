@@ -1,0 +1,38 @@
+<div class="release-result-card">
+  <%= image_tag(
+        artwork_url,
+        alt: "#{@release["title"]} cover",
+        class: "search-cover",
+        onerror: "this.style.display='none'"
+      ) %>
+
+  <h3>
+    <%= @release["title"] %>
+  </h3>
+
+  <p class="search-artist-name">
+    <%= artist_names %>
+  </p>
+
+  <p>
+    Release Type:
+    <strong>
+      <%= release_type %>
+    </strong>
+  </p>
+
+  <p>
+    First Released:
+    <strong>
+      <%= release_date %>
+    </strong>
+  </p>
+
+  <%= button_to(
+        "Add to My Collection",
+        import_music_release_path(
+          @release["id"]
+        ),
+        method: :post
+      ) %>
+</div>

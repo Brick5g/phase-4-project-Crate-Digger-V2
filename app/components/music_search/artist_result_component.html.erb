@@ -1,0 +1,31 @@
+<div class="artist-result-card">
+  <h3>
+    <%= @artist["name"] %>
+  </h3>
+
+  <% if disambiguation.present? %>
+    <p>
+      <%= disambiguation %>
+    </p>
+  <% end %>
+
+  <% if country.present? %>
+    <p>
+      Country:
+      <strong><%= country %></strong>
+    </p>
+  <% end %>
+
+  <p>
+    MusicBrainz Match Score:
+    <strong><%= score %></strong>
+  </p>
+
+  <%= link_to(
+        "View All Releases",
+        music_search_artist_path(
+          @artist["id"]
+        ),
+        class: "search-link"
+      ) %>
+</div>

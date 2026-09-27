@@ -9,17 +9,9 @@
   best describe the music.
 </p>
 
-<% if @record.errors.any? %>
-  <div>
-    <h2>We could not save this release:</h2>
-
-    <% @record.errors.full_messages.each do |message| %>
-      <p>
-        <%= message %>
-      </p>
-    <% end %>
-  </div>
-<% end %>
+<%= render ValidationErrorsComponent.new(
+      resource: @record
+    ) %>
 
 <% if @genre_error.present? %>
   <div>
@@ -46,10 +38,10 @@
                    "Artist" %>
 
     <%= form.collection_select :artist_id,
-                               Artist.order(:name),
-                               :id,
-                               :name,
-                               prompt: "Choose an artist" %>
+                           @artists,
+                           :id,
+                           :name,
+                           prompt: "Choose an artist" %>
   </div>
 
   <div>

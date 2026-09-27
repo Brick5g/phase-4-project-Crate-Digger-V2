@@ -54,13 +54,9 @@
         <% if @record.record_genres.any? %>
           <div class="genre-tags">
             <% @record.record_genres.each do |record_genre| %>
-              <div class="genre-tag">
-                <%= record_genre.genre.name %>
-
-                <% if record_genre.primary_genre %>
-                  <strong>Primary</strong>
-                <% end %>
-              </div>
+             <%= render GenreTagComponent.new(
+                record_genre: record_genre
+              ) %>
             <% end %>
           </div>
         <% else %>
@@ -81,48 +77,10 @@
   <section class="record-section">
     <h2>My Crate</h2>
 
-    <% if current_user %>
-      <% saved_entry =
-           current_user.collection_entries.find_by(
-             record: @record
-           ) %>
-
-      <% if saved_entry %>
-        <div class="crate-status">
-          <strong>Saved to My Collection</strong>
-
-          <p>
-            This release is already part of your Crate Digger collection.
-          </p>
-
-          <%= link_to "View My Collection",
-                      collection_entries_path,
-                      class: "record-action-link" %>
-        </div>
-      <% else %>
-        <div class="crate-status">
-          <strong>Not Saved Yet</strong>
-
-          <p>
-            Want to remember this release?
-          </p>
-
-          <%= link_to "Save to My Collection",
-                      new_record_collection_entry_path(@record),
-                      class: "record-action-link" %>
-        </div>
-      <% end %>
-    <% else %>
-      <div class="crate-status">
-        <p>
-          Log in to save this release to your personal collection.
-        </p>
-
-        <%= link_to "Log In",
-                    login_path,
-                    class: "record-action-link" %>
-      </div>
-    <% end %>
+    <%= render CrateStatusComponent.new(
+      record: @record,
+      current_user: current_user
+    ) %>
   </section>
 
   <section class="record-section">
@@ -131,29 +89,10 @@
     <% if @record.reviews.any? %>
       <div class="record-reviews">
         <% @record.reviews.each do |review| %>
-          <div class="review-card">
-            <div class="review-heading">
-              <strong>
-                <%= review.user.username %>
-              </strong>
-
-              <span class="review-score">
-                <%= review.rating %> / 10
-              </span>
-            </div>
-
-            <% if review.body.present? %>
-              <p>
-                <%= review.body %>
-              </p>
-            <% end %>
-
-            <% if current_user == review.user %>
-              <%= link_to "Edit My Review",
-                          edit_review_path(review),
-                          class: "record-action-link" %>
-            <% end %>
-          </div>
+          <%= render ReviewCardComponent.new(
+            review: review,
+            current_user: current_user
+          ) %>
         <% end %>
       </div>
     <% else %>
@@ -164,9 +103,7 @@
 
     <% if current_user %>
       <% my_review =
-           current_user.reviews.find_by(
-             record: @record
-           ) %>
+           current_user.review_for(@record) %>
 
       <% unless my_review %>
         <%= link_to "Review This Release",
