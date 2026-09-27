@@ -1,0 +1,67 @@
+<div class="collection-card">
+  <% if artwork? %>
+    <%= image_tag @record.artwork_url,
+                  alt: "#{@record.title} cover",
+                  class: "collection-cover" %>
+  <% else %>
+    <div class="collection-cover-missing">
+      No Artwork
+    </div>
+  <% end %>
+
+  <div class="collection-info">
+    <h2>
+      <%= @record.title %>
+    </h2>
+
+    <p class="collection-artist">
+      <%= @record.artist.name %>
+    </p>
+
+    <% if reviewed? %>
+      <p class="collection-rating">
+        My Rating:
+        <strong>
+          <%= @review.rating %> / 10
+        </strong>
+      </p>
+    <% else %>
+      <p>
+        You have not rated this release yet.
+      </p>
+
+      <p>
+        <%= link_to "Rate This Release",
+                    new_record_review_path(@record) %>
+      </p>
+    <% end %>
+
+    <% if notes? %>
+      <div class="collection-note">
+        <strong>My Note:</strong>
+
+        <p>
+          <%= @entry.notes %>
+        </p>
+      </div>
+    <% end %>
+
+    <div class="collection-actions">
+      <%= link_to "View Release",
+                  record_path(@record),
+                  class: "collection-link" %>
+
+      <%= link_to "Edit My Note",
+                  edit_collection_entry_path(@entry),
+                  class: "collection-link" %>
+
+      <%= button_to "Remove",
+                    collection_entry_path(@entry),
+                    method: :delete,
+                    class: "collection-remove-button",
+                    data: {
+                      turbo_confirm: "Remove this release from your collection?"
+                    } %>
+    </div>
+  </div>
+</div>

@@ -49,37 +49,9 @@
 
     <div class="artist-results-grid">
       <% @artist_results.each do |artist| %>
-        <div class="artist-result-card">
-          <h3>
-            <%= artist["name"] %>
-          </h3>
-
-          <% if artist["disambiguation"].present? %>
-            <p>
-              <%= artist["disambiguation"] %>
-            </p>
-          <% end %>
-
-          <% if artist["country"].present? %>
-            <p>
-              Country:
-              <strong><%= artist["country"] %></strong>
-            </p>
-          <% end %>
-
-          <p>
-            MusicBrainz Match Score:
-            <strong><%= artist["score"] %></strong>
-          </p>
-
-          <%= link_to(
-                "View All Releases",
-                music_search_artist_path(
-                  artist["id"]
-                ),
-                class: "search-link"
-              ) %>
-        </div>
+        <%= render MusicSearch::ArtistResultComponent.new(
+              artist: artist
+            ) %>
       <% end %>
     </div>
   </section>
@@ -96,52 +68,9 @@
 
     <div class="release-results-grid">
       <% @release_results.each do |release| %>
-        <% artist_names =
-             release.fetch(
-               "artist-credit",
-               []
-             ).map do |credit|
-               credit["name"]
-             end.compact.join(", ") %>
-
-        <div class="release-result-card">
-          <%= image_tag(
-                "https://coverartarchive.org/release-group/#{release["id"]}/front-250",
-                alt: "#{release["title"]} cover",
-                class: "search-cover",
-                onerror: "this.style.display='none'"
-              ) %>
-
-          <h3>
-            <%= release["title"] %>
-          </h3>
-
-          <p class="search-artist-name">
-            <%= artist_names.presence || "Unknown Artist" %>
-          </p>
-
-          <p>
-            Release Type:
-            <strong>
-              <%= release["primary-type"].presence || "Unknown" %>
-            </strong>
-          </p>
-
-          <p>
-            First Released:
-            <strong>
-              <%= release["first-release-date"].presence || "Unknown" %>
-            </strong>
-          </p>
-
-          <%= button_to(
-                "Add to My Collection",
-                import_music_release_path(
-                  release["id"]
-                ),
-                method: :post
-              ) %>
-        </div>
+        <%= render MusicSearch::ReleaseResultComponent.new(
+              release: release
+            ) %>
       <% end %>
     </div>
   </section>

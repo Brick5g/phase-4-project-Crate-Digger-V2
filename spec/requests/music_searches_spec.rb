@@ -77,7 +77,7 @@ RSpec.describe "MusicSearches", type: :request do
       user = log_in_user
 
       allow_any_instance_of(
-        MusicSearchesController
+        MusicBrainzService
       ).to receive(
         :fetch_release_group
       ).and_return(
@@ -138,7 +138,7 @@ RSpec.describe "MusicSearches", type: :request do
       )
 
       allow_any_instance_of(
-        MusicSearchesController
+        MusicBrainzService
       ).to receive(
         :fetch_release_group
       ).and_return(
@@ -170,7 +170,7 @@ RSpec.describe "MusicSearches", type: :request do
       )
 
       allow_any_instance_of(
-        MusicSearchesController
+        MusicBrainzService
       ).to receive(
         :fetch_release_group
       ).and_return(
@@ -205,7 +205,7 @@ RSpec.describe "MusicSearches", type: :request do
       )
 
       allow_any_instance_of(
-        MusicSearchesController
+        MusicBrainzService
       ).to receive(
         :fetch_release_group
       ).and_return(
@@ -246,7 +246,7 @@ RSpec.describe "MusicSearches", type: :request do
       )
 
       allow_any_instance_of(
-        MusicSearchesController
+        MusicBrainzService
       ).to receive(
         :fetch_release_group
       ).and_return(
@@ -298,7 +298,7 @@ RSpec.describe "MusicSearches", type: :request do
       }
 
       allow_any_instance_of(
-        MusicSearchesController
+        MusicBrainzService
       ).to receive(
         :fetch_release_group
       ).and_return(
@@ -324,7 +324,7 @@ RSpec.describe "MusicSearches", type: :request do
       )
 
       allow_any_instance_of(
-        MusicSearchesController
+        MusicBrainzService
       ).to receive(
         :fetch_release_group
       ).and_return(

@@ -1,0 +1,23 @@
+<div class="review-card">
+  <div class="review-heading">
+    <strong>
+      <%= @review.user.username %>
+    </strong>
+
+    <span class="review-score">
+      <%= @review.rating %> / 10
+    </span>
+  </div>
+
+  <% if @review.body.present? %>
+    <p>
+      <%= @review.body %>
+    </p>
+  <% end %>
+
+  <% if owned_by_current_user? %>
+    <%= link_to "Edit My Review",
+                edit_review_path(@review),
+                class: "record-action-link" %>
+  <% end %>
+</div>

@@ -9,17 +9,9 @@
   You can also leave a private note for yourself.
 </p>
 
-<% if @collection_entry.errors.any? %>
-  <div>
-    <h2>Please fix the following:</h2>
-
-    <ul>
-      <% @collection_entry.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<%= render ValidationErrorsComponent.new(
+      resource: @collection_entry
+    ) %>
 
 <%= form_with model: [ @record, @collection_entry ] do |form| %>
   <div>

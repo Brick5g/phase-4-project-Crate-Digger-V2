@@ -15,32 +15,9 @@
 
 <% if @genre.records.any? %>
   <% @genre.records.alphabetical.each do |record| %>
-    <div>
-      <% if record.artwork_url.present? %>
-        <%= image_tag record.artwork_url,
-                      alt: "#{record.title} cover" %>
-      <% end %>
-
-      <h3>
-        <%= link_to record.title,
-                    record_path(record) %>
-      </h3>
-
-      <p>
-        Artist:
-        <%= record.artist.name %>
-      </p>
-
-      <p>
-        Release Type:
-        <%= record.release_type %>
-      </p>
-
-      <p>
-        Release Date:
-        <%= record.release_date || "Unknown" %>
-      </p>
-    </div>
+    <%= render RecordCardComponent.new(
+          record: record
+        ) %>
   <% end %>
 <% else %>
   <p>

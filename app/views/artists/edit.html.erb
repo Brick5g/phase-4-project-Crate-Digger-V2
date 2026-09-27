@@ -5,17 +5,9 @@
   describe their music.
 </p>
 
-<% if @artist.errors.any? %>
-  <div>
-    <h2>We could not update this artist:</h2>
-
-    <% @artist.errors.full_messages.each do |message| %>
-      <p>
-        <%= message %>
-      </p>
-    <% end %>
-  </div>
-<% end %>
+<%= render ValidationErrorsComponent.new(
+      resource: @artist
+    ) %>
 
 <% if @genre_error.present? %>
   <div>

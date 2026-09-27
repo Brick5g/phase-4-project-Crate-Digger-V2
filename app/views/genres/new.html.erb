@@ -5,17 +5,9 @@
   Use the description to briefly explain the musical style.
 </p>
 
-<% if @genre.errors.any? %>
-  <div>
-    <h2>Please fix the following:</h2>
-
-    <ul>
-      <% @genre.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<%= render ValidationErrorsComponent.new(
+      resource: @genre
+    ) %>
 
 <%= form_with model: @genre do |form| %>
   <div>

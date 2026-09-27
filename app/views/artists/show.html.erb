@@ -24,7 +24,7 @@
 
 <h2>Genres</h2>
 
-<% primary_artist_genre = @artist.artist_genres.find_by(primary_genre: true) %>
+<% primary_artist_genre = @artist.primary_artist_genre %>
 
 <% if primary_artist_genre %>
   <p>
@@ -33,7 +33,7 @@
   </p>
 <% end %>
 
-<% additional_artist_genres = @artist.artist_genres.where(primary_genre: false) %>
+<% additional_artist_genres = @artist.additional_artist_genres %>
 
 <% if additional_artist_genres.any? %>
   <p>
@@ -55,28 +55,9 @@
 
 <% if @artist.records.any? %>
   <% @artist.records.alphabetical.each do |record| %>
-    <div>
-      <% if record.artwork_url.present? %>
-        <%= image_tag record.artwork_url,
-                      alt: "#{record.title} cover",
-                      width: 150,
-                      onerror: "this.style.display='none'" %>
-      <% end %>
-
-      <h3>
-        <%= link_to record.title, record_path(record) %>
-      </h3>
-
-      <p>
-        Release Type:
-        <%= record.release_type %>
-      </p>
-
-      <p>
-        Release Date:
-        <%= record.release_date || "Unknown" %>
-      </p>
-    </div>
+  <%= render RecordCardComponent.new(
+        record: record
+      ) %>
   <% end %>
 <% else %>
   <p>

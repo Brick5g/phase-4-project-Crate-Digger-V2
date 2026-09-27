@@ -9,17 +9,9 @@
   This does not change the release itself or anyone else's information.
 </p>
 
-<% if @collection_entry.errors.any? %>
-  <div>
-    <h2>Please fix the following:</h2>
-
-    <ul>
-      <% @collection_entry.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<%= render ValidationErrorsComponent.new(
+      resource: @collection_entry
+    ) %>
 
 <%= form_with model: @collection_entry do |form| %>
   <div>

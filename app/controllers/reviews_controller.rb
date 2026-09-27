@@ -1,54 +1,84 @@
 class ReviewsController < ApplicationController
   before_action :require_login
 
+  before_action :set_record,
+                only: [ :new, :create ]
+
+  before_action :set_review,
+                only: [ :edit, :update, :destroy ]
+
   def new
-    @record = Record.find(params[:record_id])
-    @review = current_user.reviews.new(record: @record)
+    @review =
+      current_user.reviews.new(
+        record: @record
+      )
   end
 
   def create
-    @record = Record.find(params[:record_id])
+    @review =
+      current_user.reviews.new(
+        review_params
+      )
 
-    @review = current_user.reviews.new(
-      review_params
-    )
-
-    @review.record = @record
+    @review.record =
+      @record
 
     if @review.save
-      redirect_to record_path(@record)
+      redirect_to record_path(
+        @record
+      )
     else
-      render :new, status: :unprocessable_content
+      render :new,
+             status: :unprocessable_content
     end
   end
 
   def edit
-    @review = current_user.reviews.find(params[:id])
   end
 
   def update
-    @review = current_user.reviews.find(params[:id])
-
-    if @review.update(review_params)
-      redirect_to record_path(@review.record)
+    if @review.update(
+      review_params
+    )
+      redirect_to record_path(
+        @review.record
+      )
     else
-      render :edit, status: :unprocessable_content
+      render :edit,
+             status: :unprocessable_content
     end
   end
 
   def destroy
-    @review = current_user.reviews.find(params[:id])
-    record = @review.record
+    record =
+      @review.record
 
     @review.destroy
 
-    redirect_to record_path(record)
+    redirect_to record_path(
+      record
+    )
   end
 
   private
 
+  def set_record
+    @record = Record.find(
+      params[:record_id]
+    )
+  end
+
+  def set_review
+    @review =
+      current_user.reviews.find(
+        params[:id]
+      )
+  end
+
   def review_params
-    params.require(:review).permit(
+    params.require(
+      :review
+    ).permit(
       :rating,
       :body
     )

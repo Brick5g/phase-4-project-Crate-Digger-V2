@@ -1,0 +1,41 @@
+<section class="record-section">
+  <h2>My Crate</h2>
+
+  <% if logged_in? %>
+    <% if saved? %>
+      <div class="crate-status">
+        <strong>Saved to My Collection</strong>
+
+        <p>
+          This release is already part of your Crate Digger collection.
+        </p>
+
+        <%= link_to "View My Collection",
+                    collection_entries_path,
+                    class: "record-action-link" %>
+      </div>
+    <% else %>
+      <div class="crate-status">
+        <strong>Not Saved Yet</strong>
+
+        <p>
+          Want to remember this release?
+        </p>
+
+        <%= link_to "Save to My Collection",
+                    new_record_collection_entry_path(@record),
+                    class: "record-action-link" %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="crate-status">
+      <p>
+        Log in to save this release to your personal collection.
+      </p>
+
+      <%= link_to "Log In",
+                  login_path,
+                  class: "record-action-link" %>
+    </div>
+  <% end %>
+</section>

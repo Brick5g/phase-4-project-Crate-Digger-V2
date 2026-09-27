@@ -1,0 +1,37 @@
+<%= render ValidationErrorsComponent.new(
+      resource: @review
+    ) %>
+
+<%= form_with model: form_model do |form| %>
+  <div class="review-form-section">
+    <h2>Your Rating</h2>
+
+    <div class="rating-labels">
+      <span>Did not enjoy it</span>
+      <span>Loved it</span>
+    </div>
+
+    <div class="rating-options">
+      <% (1..10).each do |number| %>
+        <div class="rating-choice">
+          <%= form.radio_button :rating, number %>
+
+          <%= form.label :rating,
+                         number,
+                         value: number,
+                         class: "rating-button" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="review-form-section">
+    <%= form.label :body,
+                   "Your Thoughts (Optional)" %>
+
+    <%= form.text_area :body,
+                       placeholder: "What stood out to you about this release?" %>
+  </div>
+
+  <%= form.submit submit_text %>
+<% end %>
